@@ -1,0 +1,31 @@
+import p5 from "p5";
+import Map, { MapLists } from "./Map";
+import Player from "./Player";
+import Camera from "./Camera";
+
+export default class Scene {
+    private p5: p5;
+
+    private camera: Camera;
+
+    private player: Player;
+    private map: Map;
+
+    constructor(p5: p5) {
+        this.p5 = p5;
+        this.map = new Map(MapLists.getDefaultMap());
+
+        this.player = new Player(p5, this.map.getCells().length/2 * Map.CELL_SIZE, this.map.getCells()[0].length/2 * Map.CELL_SIZE);
+        
+        this.camera = new Camera(this.p5, this.player, 1);
+    }
+
+    public draw(): void {
+        // Update player controls
+        this.player.UpdateControls(this.map);
+
+        // Draw scene
+        this.map.draw(this.p5, this.camera);
+        this.player.draw(this.p5, this.camera);
+    }
+}
