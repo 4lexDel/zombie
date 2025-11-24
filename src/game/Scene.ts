@@ -2,6 +2,7 @@ import p5 from "p5";
 import Map, { MapLists } from "./Map";
 import Player from "./Player";
 import Camera from "./Camera";
+import Gun from "./item/Gun";
 
 export default class Scene {
     private p5: p5;
@@ -14,6 +15,8 @@ export default class Scene {
     constructor(p5: p5) {
         this.p5 = p5;
         this.map = new Map(MapLists.getDefaultMap());
+        this.map.addItem(new Gun(6.5 * Map.CELL_SIZE, 6.5 * Map.CELL_SIZE));
+        this.map.addItem(new Gun(10.5 * Map.CELL_SIZE, 8.5 * Map.CELL_SIZE));
 
         this.player = new Player(p5, this.map.getCells().length/2 * Map.CELL_SIZE, this.map.getCells()[0].length/2 * Map.CELL_SIZE);
         

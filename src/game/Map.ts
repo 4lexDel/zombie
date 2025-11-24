@@ -1,8 +1,9 @@
 import p5 from "p5";
-import Cell from "./Cell/Cell";
+import Cell from "./cell/Cell";
 import Camera from "./Camera";
-import Ground from "./Cell/Ground";
-import Wall from "./Cell/Wall";
+import Ground from "./cell/Ground";
+import Wall from "./cell/Wall";
+import type Item from "./item/Item";
 
 export class MapLists {
     public static getDefaultMap(): Cell[][] {
@@ -40,6 +41,7 @@ export default class Map {
     public static CELL_SIZE: number = 50;
     
     private cells: Cell[][];
+    private items: Item[] = [];
 
     constructor(cells: Cell[][]) {
         this.cells = cells;
@@ -55,22 +57,26 @@ export default class Map {
         return this.cells[cx][cy];
     }
 
-    // public setCell(x: number, y: number, cell: Cell): void {
-    //     if (x >= 0 && y >= 0 && x < this.cells.length && y < this.cells[0].length) {
-    //         this.cells[x][y] = cell;
-    //     }
-    // }
+    public addItem(item: Item): void {
+        this.items.push(item);
+    }
 
     public getCells(): Cell[][] {
         return this.cells;
     }
 
     public draw(p5: p5, camera: Camera): void {
+        // Draw cells
         for (let x = 0; x < this.cells.length; x++) {
             for (let y = 0; y < this.cells[0].length; y++) {
                 const cell = this.cells[x][y];
                 cell.draw(p5, camera);
             }
+        }
+
+        // Draw items
+        for (const item of this.items) {
+            item.draw(p5, camera);
         }
     }
 }
