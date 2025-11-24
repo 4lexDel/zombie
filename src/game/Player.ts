@@ -2,18 +2,25 @@ import p5 from "p5";
 import BaseObject from "./BaseObject";
 import Camera from "./Camera";
 import Map from "./Map";
+import Inventory from "./Inventory";
+import Gun from "./item/Gun";
 
 export default class Player extends BaseObject {
     public static DIAMETER: number = 30;
     
-    private speed: number = 4;
-
     private p5: p5;
+    
+    private inventory: Inventory;
+
+    private speed: number = 4;
 
     constructor(p5: p5, x: number = 0, y: number = 0) {
         super(x, y);
 
         this.p5 = p5;
+        this.inventory = new Inventory();
+
+        this.inventory.addItem(new Gun());
     }
 
     public UpdateControls(map: Map): void {
@@ -82,10 +89,16 @@ export default class Player extends BaseObject {
         if (canMoveY) this.y = newY;
     }
 
+    public resize(width: number, height: number): void {
+        this.inventory.resize(width, height);
+    }
+
     public draw(p5: p5, camera: Camera): void {
         p5.fill(0, 200, 0);
         p5.stroke(0);
         p5.strokeWeight(1);
         p5.ellipse(this.x - camera.getOriginX(), this.y - camera.getOriginY(), Player.DIAMETER, Player.DIAMETER);
+
+        this.inventory.draw(p5);
     }
 }

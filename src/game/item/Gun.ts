@@ -1,6 +1,7 @@
 import p5 from "p5";
 import Weapon from "./Weapon";
 import Camera from "../Camera";
+import type Inventory from "../Inventory";
 
 export default class Gun extends Weapon {
     private width: number = 30;
@@ -10,7 +11,14 @@ export default class Gun extends Weapon {
         super("Gun", 10, 2, x, y);
     }
 
+    public collect(inventory: Inventory) {
+        this.isPicked = true;
+        inventory.addItem(this);
+    }
+
     public draw(p5: p5, camera: Camera): void {
+        if (this.isPicked) return;
+
         p5.fill(150, 150, 150);
         p5.stroke(0);
         p5.strokeWeight(2);
@@ -27,6 +35,26 @@ export default class Gun extends Weapon {
         p5.rotate(angle);
         p5.rectMode(p5.CENTER);
         p5.rect(0, 0, this.width, this.height, 2);
+        p5.pop();
+    }
+
+    public drawIcon(p5: p5, x: number, y: number, maxWidth: number, maxHeight: number): void {
+        if (maxWidth <= 0 || maxHeight <= 0) return;
+
+        // fit
+        const scale = Math.min(maxWidth / this.width, maxHeight / this.height);
+        const w = this.width * scale;
+        const h = this.height * scale;
+
+        const cx = x + maxWidth / 2;
+        const cy = y + maxHeight / 2;
+
+        p5.push();
+        p5.fill(150, 150, 150);
+        p5.stroke(0);
+        p5.strokeWeight(2);
+        p5.rectMode(p5.CENTER);
+        p5.rect(cx, cy, w, h, Math.max(1, 2 * scale));
         p5.pop();
     }
 }

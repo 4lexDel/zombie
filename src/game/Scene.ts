@@ -23,6 +23,10 @@ export default class Scene {
         this.camera = new Camera(this.p5, this.player, 1);
     }
 
+    public resize(width: number, height: number): void {
+        this.player.resize(width, height);
+    }
+
     public draw(): void {
         // Update player controls
         this.player.UpdateControls(this.map);

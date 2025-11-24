@@ -16,11 +16,19 @@ export default class Item extends BaseObject {
         this.creationTime = Date.now();
     }
 
+    public setIsPicked(picked: boolean): void {
+        this.isPicked = picked;
+    }
+
     public getName(): string {
         return this.name;
     }
 
-    public draw(_: p5, __: Camera): void {
+    public draw(p5: p5, camera: Camera): void {
+        throw new Error("Method not implemented.");
+    }
+
+    public drawIcon(p5: p5, x: number, y: number, width: number, height: number): void {
         throw new Error("Method not implemented.");
     }
 }

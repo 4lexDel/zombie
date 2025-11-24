@@ -1,10 +1,10 @@
-# Project L
+# Zombie
 
 ## Installation
 ```bash
 # Fetch source code
-git clone <LINK>
-cd project-l
+git clone https://github.com/4lexDel/zombie.git
+cd zombie
 ```
 ```bash
 # Install the dependencies

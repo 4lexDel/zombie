@@ -16,6 +16,7 @@ const sketch = (p: p5) => {
 
     // Initialize the scene
     scene = new Scene(p);
+    scene.resize(p.windowWidth, p.windowHeight);
   };
 
   p.draw = () => {
@@ -27,6 +28,8 @@ const sketch = (p: p5) => {
   p.windowResized = () => {    
     p.resizeCanvas(p.windowWidth, p.windowHeight);
     p.background(220);
+
+    scene.resize(p.windowWidth, p.windowHeight);
   };
 };
 
