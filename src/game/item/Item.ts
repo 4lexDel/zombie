@@ -1,6 +1,6 @@
 import p5 from "p5";
 import BaseObject from "../BaseObject";
-import Camera from "../Camera";
+import type Inventory from "../Inventory";
 
 export default class Item extends BaseObject {
     protected name: string;
@@ -16,6 +16,11 @@ export default class Item extends BaseObject {
         this.creationTime = Date.now();
     }
 
+    public collect(inventory: Inventory) {
+        this.isPicked = true;
+        inventory.addItem(this);
+    }
+
     public setIsPicked(picked: boolean): void {
         this.isPicked = picked;
     }
@@ -24,7 +29,7 @@ export default class Item extends BaseObject {
         return this.name;
     }
 
-    public draw(p5: p5, camera: Camera): void {
+    public draw(p5: p5): void {
         throw new Error("Method not implemented.");
     }
 

@@ -1,6 +1,5 @@
 import p5 from "p5";
 import BaseObject from "./BaseObject";
-import Camera from "./Camera";
 import Map from "./Map";
 import Inventory from "./Inventory";
 import Gun from "./item/Gun";
@@ -12,7 +11,7 @@ export default class Player extends BaseObject {
     
     private inventory: Inventory;
 
-    private speed: number = 4;
+    private speed: number = 6;
 
     constructor(p5: p5, x: number = 0, y: number = 0) {
         super(x, y);
@@ -93,11 +92,11 @@ export default class Player extends BaseObject {
         this.inventory.resize(width, height);
     }
 
-    public draw(p5: p5, camera: Camera): void {
+    public draw(p5: p5): void {
         p5.fill(0, 200, 0);
         p5.stroke(0);
         p5.strokeWeight(1);
-        p5.ellipse(this.x - camera.getOriginX(), this.y - camera.getOriginY(), Player.DIAMETER, Player.DIAMETER);
+        p5.ellipse(this.x, this.y, Player.DIAMETER, Player.DIAMETER);
 
         this.inventory.draw(p5);
     }

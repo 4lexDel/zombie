@@ -65,18 +65,18 @@ export default class Map {
         return this.cells;
     }
 
-    public draw(p5: p5, camera: Camera): void {
+    public draw(p5: p5): void {
         // Draw cells
         for (let x = 0; x < this.cells.length; x++) {
             for (let y = 0; y < this.cells[0].length; y++) {
                 const cell = this.cells[x][y];
-                cell.draw(p5, camera);
+                cell.draw(p5);
             }
         }
 
         // Draw items
         for (const item of this.items) {
-            item.draw(p5, camera);
+            item.draw(p5);
         }
     }
 }

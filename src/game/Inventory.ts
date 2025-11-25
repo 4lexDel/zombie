@@ -40,6 +40,7 @@ export default class Inventory {
         let ox = (p.width - inventoryWidth) / 2;
         let oy = p.height - inventoryHeight - 2 * this.inventoryPadding;
 
+        p.resetMatrix();
         p.fill(200, 200, 200, 220);
         p.noStroke();
         p.rect(ox - this.inventoryPadding, oy - this.inventoryPadding, inventoryWidth + 2 * this.inventoryPadding, inventoryHeight + 2 * this.inventoryPadding, 10);

@@ -33,6 +33,11 @@ A zombie survivor game
 <br>
 
 ## Features
+- Manage performance!
+    * Display the content on the screen only
+    * Avoid useless refreshing
+    * Set the FPS  (use an alternative based on the time)
+    * Check on google
 - Collect the items
 - Place a block
 - Shoot

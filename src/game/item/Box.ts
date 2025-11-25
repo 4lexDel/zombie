@@ -1,18 +1,18 @@
 import p5 from "p5";
-import Weapon from "./Weapon";
+import Item from "./Item";
+import { COLORS } from "../../colors";
 
-export default class Gun extends Weapon {
-    private width: number = 30;
-    private height: number = 10;
+export default class Box extends Item {
+    private size = 30;
 
     constructor(x: number = 0, y: number = 0) {
-        super("Gun", 10, 2, x, y);
+        super("Box", x, y);
     }
 
     public draw(p5: p5): void {
         if (this.isPicked) return;
 
-        p5.fill(150, 150, 150);
+        p5.fill(COLORS.brown.value);
         p5.stroke(0);
         p5.strokeWeight(2);
 
@@ -27,7 +27,7 @@ export default class Gun extends Weapon {
         p5.translate(cx, cy);
         p5.rotate(angle);
         p5.rectMode(p5.CENTER);
-        p5.rect(0, 0, this.width, this.height, 2);
+        p5.rect(0, 0, this.size, this.size, 2);
         p5.pop();
     }
 
@@ -35,20 +35,18 @@ export default class Gun extends Weapon {
         if (maxWidth <= 0 || maxHeight <= 0) return;
 
         // fit
-        const scale = Math.min(maxWidth / this.width, maxHeight / this.height);
-        const w = this.width * scale;
-        const h = this.height * scale;
+        const scale = Math.min(maxWidth / this.size, maxHeight / this.size);
+        const s = this.size * scale;
 
         const cx = x + maxWidth / 2;
         const cy = y + maxHeight / 2;
 
         p5.push();
-        p5.fill(150, 150, 150);
+        p5.fill(COLORS.brown.value);
         p5.stroke(0);
         p5.strokeWeight(2);
         p5.rectMode(p5.CENTER);
-        p5.rect(cx, cy, w, h, Math.max(1, 2 * scale));
+        p5.rect(cx, cy, s, s, Math.max(1, 2 * scale));
         p5.pop();
     }
 }
-

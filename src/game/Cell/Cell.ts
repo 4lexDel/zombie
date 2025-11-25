@@ -1,8 +1,7 @@
 import p5 from "p5";
 import BaseObject from "../BaseObject";
-import Camera from "../Camera";
 import { COLORS, type ColorOption } from "../../colors";
-import Map from "../Map";
+import Item from "../item/Item";
 
 export class CellOptions {
     public isSolid: boolean = false;
@@ -10,10 +9,12 @@ export class CellOptions {
 }
 
 export default class Cell extends BaseObject {    
-    private dx: number;
-    private dy: number;
+    protected dx: number;
+    protected dy: number;
 
-    private cellOptions: CellOptions = new CellOptions();
+    protected cellOptions: CellOptions = new CellOptions();
+
+    protected itemUsed: Item | null = null;
 
     constructor(x: number, y: number, dx: number = 50, dy: number = 50, cellOptions?: CellOptions) {
         super(x, y);
@@ -28,13 +29,13 @@ export default class Cell extends BaseObject {
         return this.cellOptions;
     }
 
-    public draw(p5: p5, camera: Camera): void {
+    public draw(p5: p5): void {
         p5.fill(this.cellOptions.color.value);
         p5.stroke(0);
         p5.strokeWeight(2);
         p5.rect(
-            this.x * Map.CELL_SIZE - camera.getOriginX(),
-            this.y * Map.CELL_SIZE - camera.getOriginY(),
+            this.x * this.dx,
+            this.y * this.dy,
             this.dx,
             this.dy,
             3
