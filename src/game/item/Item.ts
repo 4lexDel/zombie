@@ -1,6 +1,7 @@
 import p5 from "p5";
 import BaseObject from "../BaseObject";
 import type Inventory from "../Inventory";
+import Map from "../Map";
 
 export class ItemOptions {
     public isStackable: boolean = false;
@@ -14,6 +15,8 @@ export default class Item extends BaseObject {
     protected itemOptions: ItemOptions = { isStackable: true };
 
     protected creationTime: number;
+
+    protected radius: number = Map.CELL_SIZE/2;
 
     constructor(name: string, x: number = 0, y: number = 0) {
         super(x, y);
@@ -41,6 +44,10 @@ export default class Item extends BaseObject {
 
     public getIsPicked(): boolean {
         return this.isPicked;
+    }
+
+    public getRadius(): number {
+        return this.radius;
     }
 
     public draw(p5: p5): void {

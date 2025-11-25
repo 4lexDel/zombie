@@ -7,6 +7,7 @@ export default class Box extends Item {
 
     constructor(x: number = 0, y: number = 0) {
         super("Box", x, y);
+        this.radius = 20;
     }
 
     public draw(p5: p5): void {

@@ -43,11 +43,17 @@ export default class Player extends BaseObject {
         }
     }
 
-    public UpdateControls(p: p5): void {
+    public updateControls(p: p5): void {
         if (!p.keyIsPressed) {
             return;
         }
 
+        this.manageCellCollisions(p);
+
+        this.manageItemCollisions(p);
+    }
+
+    public manageCellCollisions(p: p5): void {
         let newDirectionFacing = { x:0, y: 0 };
             
         let dx = 0;
@@ -115,11 +121,13 @@ export default class Player extends BaseObject {
         // Apply movement on axes that are clear
         if (canMoveX) this.x = newX;
         if (canMoveY) this.y = newY;
+    }
 
+    public manageItemCollisions(p: p5): void {
         // Check items collision
         this.map.getItems().forEach((newItem: Item) => {
             let d = p.dist(newItem.getX(), newItem.getY(), this.x, this.y);
-            if (d < Map.CELL_SIZE) {                
+            if (d < Player.DIAMETER/2 + newItem.getRadius()) {                
                 // Try to collect the item
                 this.inventory.addItem(newItem);
             }

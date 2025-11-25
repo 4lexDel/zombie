@@ -31,7 +31,7 @@ export default class Scene {
 
     public draw(): void {
         // Update player controls
-        this.player.UpdateControls(this.p5);
+        this.player.updateControls(this.p5);
 
         this.p5.push();
         this.p5.scale(this.camera.getZoom(), this.camera.getZoom());        

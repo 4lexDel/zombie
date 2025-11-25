@@ -7,6 +7,7 @@ export default class Gun extends Weapon {
 
     constructor(x: number = 0, y: number = 0) {
         super("Gun", 10, 2, x, y);
+        this.radius = 20;
     }
 
     public draw(p5: p5): void {
