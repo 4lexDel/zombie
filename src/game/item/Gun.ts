@@ -22,8 +22,8 @@ export default class Gun extends Weapon {
 
         p5.push();
         // translate to the gun center, rotate, then draw the rectangle centered
-        const cx = this.x //- camera.getOriginX();
-        const cy = this.y //- camera.getOriginY();
+        const cx = this.x;
+        const cy = this.y;
         p5.translate(cx, cy);
         p5.rotate(angle);
         p5.rectMode(p5.CENTER);
