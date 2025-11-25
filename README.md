@@ -39,6 +39,9 @@ A zombie survivor game
     * Set the FPS  (use an alternative based on the time)
     * Check on google
 - Collect the items
+- Inventory
+    * Select a cell with the num keys
+    * Drop it (in front of the player direction)
 - Place a block
 - Shoot
     * Bullet behavior (lifetime)

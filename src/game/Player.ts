@@ -13,6 +13,8 @@ export default class Player extends BaseObject {
 
     private speed: number = 6;
 
+    private directionFacing = { x: 1, y: 0 };
+
     constructor(p5: p5, x: number = 0, y: number = 0) {
         super(x, y);
 
@@ -26,26 +28,35 @@ export default class Player extends BaseObject {
         if (!this.p5.keyIsPressed) {
             return;
         }
+
+        let newDirectionFacing = { x:0, y: 0 };
             
         let dx = 0;
         let dy = 0;
 
         if (this.p5.keyIsDown(this.p5.UP_ARROW)) {
             dy -= 1;
+            newDirectionFacing.y -= 1;
         }
         if (this.p5.keyIsDown(this.p5.DOWN_ARROW)) {
             dy += 1;
+            newDirectionFacing.y += 1;
         }
         if (this.p5.keyIsDown(this.p5.LEFT_ARROW)) {
             dx -= 1;
+            newDirectionFacing.x -= 1;
         }
         if (this.p5.keyIsDown(this.p5.RIGHT_ARROW)) {
             dx += 1;
+            newDirectionFacing.x += 1;
         }
 
         // No movement
         if (dx === 0 && dy === 0) {
             return;
+        }
+        else {
+            this.directionFacing = newDirectionFacing;
         }
 
         // Normalize diagonal speed so total speed remains constant
@@ -96,7 +107,22 @@ export default class Player extends BaseObject {
         p5.fill(0, 200, 0);
         p5.stroke(0);
         p5.strokeWeight(1);
-        p5.ellipse(this.x, this.y, Player.DIAMETER, Player.DIAMETER);
+        
+        p5.push();
+        p5.translate(this.x, this.y)
+        p5.ellipse(0, 0, Player.DIAMETER, Player.DIAMETER);
+
+        let angle = p5.atan(this.directionFacing.y / this.directionFacing.x);
+
+        if (this.directionFacing.x < 0) angle += p5.PI;
+
+        let deltaAngle = p5.PI / 10;
+
+        p5.fill(0);
+        p5.ellipse(Player.DIAMETER/2 * p5.cos(angle+deltaAngle), Player.DIAMETER/2 * p5.sin(angle+deltaAngle), Player.DIAMETER/4, Player.DIAMETER/4);
+        p5.ellipse(Player.DIAMETER/2 * p5.cos(angle-deltaAngle), Player.DIAMETER/2 * p5.sin(angle-deltaAngle), Player.DIAMETER/4, Player.DIAMETER/4);
+
+        p5.pop();
 
         this.inventory.draw(p5);
     }
