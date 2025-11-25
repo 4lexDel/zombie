@@ -2,6 +2,8 @@ import p5 from "p5";
 import Item from "./item/Item";
 import { COLORS } from "../colors";
 
+export type Slot = { item: Item, quantity: number }
+
 export default class Inventory {
     public static MAX_ITEMS: number = 5;
 
@@ -11,27 +13,27 @@ export default class Inventory {
     private cellPadding: number = 5;
     private cellGap: number = 10;
 
-    private items: [Item?, Item?, Item?, Item?, Item?];
+    private slots: [Slot?, Slot?, Slot?, Slot?, Slot?];
 
     private cellSelected: number = 0; // From 0 to 4 
 
     private keysBinded = ['&', 'é', '"', '\'', '(']
     
     constructor() {
-        this.items = [undefined, undefined, undefined, undefined, undefined];
+        this.slots = [undefined, undefined, undefined, undefined, undefined];
     }
 
     public resize(width: number, _: number): void {
-        this.cellSize = Math.min(70, width / (Inventory.MAX_ITEMS + 1));
+        this.cellSize = Math.min(70, width / (Inventory.MAX_ITEMS + 2));
         this.cellPadding = this.cellSize * 0.1;
 
         this.inventoryPadding = this.cellSize * 0.2;
     }
 
-    addItem(item: Item): boolean {
+    addItem(item: Item, quantity: number = 1): boolean {
         for (let i = 0; i < Inventory.MAX_ITEMS; i++) {
-            if (!this.items[i]) {
-                this.items[i] = item;
+            if (!this.slots[i]) {
+                this.slots[i] = { item, quantity};
                 item.setIsPicked(true);
                 return true;
             }
@@ -66,25 +68,36 @@ export default class Inventory {
         p.noStroke();
         p.rect(ox - this.inventoryPadding, oy - this.inventoryPadding, inventoryWidth + 2 * this.inventoryPadding, inventoryHeight + 2 * this.inventoryPadding, 10);
 
-        this.items.forEach((item, index) => {
+        this.slots.forEach((slot, index) => {
+            let sx = ox + index * (this.cellSize + this.cellGap); 
+
             p.stroke(index === this.cellSelected ? COLORS.orange.value : COLORS.black.value);
             p.strokeWeight(index === this.cellSelected ? 6 : 3);
             p.noFill();
             p.rect(
-                ox + index * (this.cellSize + this.cellGap), 
+                sx, 
                 oy,
                 this.cellSize,
                 this.cellSize, 
                 3
             );
             
-            if (item) {                
-                item.drawIcon(p,
-                    ox + this.cellPadding + index * (this.cellSize + this.cellGap),
+            if (slot) {                
+                slot.item.drawIcon(p,
+                    sx + this.cellPadding,
                     oy + this.cellPadding,
                     this.cellSize - 2 * this.cellPadding,
                     this.cellSize - 2 * this.cellPadding
                 );
+
+                if (slot.quantity > 1) {
+                    p.textAlign(p.CENTER, p.CENTER);
+                    p.textSize(20);
+                    p.stroke(80);
+                    p.strokeWeight(6);
+                    p.fill(255);
+                    p.text(slot.quantity, sx + this.cellSize/2, oy + this.cellSize/2);
+                }
             }
         });
     }

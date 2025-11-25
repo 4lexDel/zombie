@@ -23,7 +23,7 @@ export default class Player extends BaseObject {
         this.inventory = new Inventory();
 
         this.inventory.addItem(new Gun());
-        this.inventory.addItem(new Box());
+        this.inventory.addItem(new Box(), 5);
     }
 
     public UpdateControls(map: Map): void {
