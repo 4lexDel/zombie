@@ -3,6 +3,7 @@ import BaseObject from "./BaseObject";
 import Map from "./Map";
 import Inventory from "./Inventory";
 import Gun from "./item/Gun";
+import Box from "./item/Box";
 
 export default class Player extends BaseObject {
     public static DIAMETER: number = 30;
@@ -22,6 +23,7 @@ export default class Player extends BaseObject {
         this.inventory = new Inventory();
 
         this.inventory.addItem(new Gun());
+        this.inventory.addItem(new Box());
     }
 
     public UpdateControls(map: Map): void {
@@ -112,15 +114,22 @@ export default class Player extends BaseObject {
         p5.translate(this.x, this.y)
         p5.ellipse(0, 0, Player.DIAMETER, Player.DIAMETER);
 
-        let angle = p5.atan(this.directionFacing.y / this.directionFacing.x);
+        let angle = 0;
+        
+        if (this.directionFacing.x !== 0) {
+            angle = p5.atan(this.directionFacing.y / this.directionFacing.x);
+        }
+        else {
+            angle = this.directionFacing.y > 0 ? p5.PI/2 : -p5.PI/2;
+        }
 
         if (this.directionFacing.x < 0) angle += p5.PI;
 
-        let deltaAngle = p5.PI / 10;
+        let deltaAngle = p5.PI / 9;
 
         p5.fill(0);
-        p5.ellipse(Player.DIAMETER/2 * p5.cos(angle+deltaAngle), Player.DIAMETER/2 * p5.sin(angle+deltaAngle), Player.DIAMETER/4, Player.DIAMETER/4);
-        p5.ellipse(Player.DIAMETER/2 * p5.cos(angle-deltaAngle), Player.DIAMETER/2 * p5.sin(angle-deltaAngle), Player.DIAMETER/4, Player.DIAMETER/4);
+        p5.ellipse(Player.DIAMETER/2 * p5.cos(angle+deltaAngle), Player.DIAMETER/2 * p5.sin(angle+deltaAngle), Player.DIAMETER/5, Player.DIAMETER/5);
+        p5.ellipse(Player.DIAMETER/2 * p5.cos(angle-deltaAngle), Player.DIAMETER/2 * p5.sin(angle-deltaAngle), Player.DIAMETER/5, Player.DIAMETER/5);
 
         p5.pop();
 

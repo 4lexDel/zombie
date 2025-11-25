@@ -8,5 +8,7 @@ export default class Weapon extends Item {
         super(name, x, y);
         this.damage = damage;
         this.range = range;
+
+        this.itemOption.isStackable = false;
     }
 }

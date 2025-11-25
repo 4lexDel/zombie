@@ -3,6 +3,7 @@ import p5 from "p5";
 export type ColorOption = { id: number, value: p5.Color }
 
 export let COLORS: {
+    black: ColorOption;
     lightGrey: ColorOption;
     yellow: ColorOption;
     green: ColorOption;
@@ -20,11 +21,12 @@ export let COLORS: {
 // Call this once in setup()
 export function initColors(p: p5) {    
     COLORS = {
+        black: { id: 0, value: p.color(0) },
         lightGrey : { id: 1, value: p.color(240) },
         yellow : { id: 2, value: p.color(255, 210, 100) },
         green : { id: 3, value: p.color(0, 255, 0) },
         blue : { id: 4, value: p.color(0, 120, 255) },
-        orange : { id: 5, value: p.color(150, 0, 200) },
+        orange : { id: 5, value: p.color(240, 126, 0) },
         purple : { id: 6, value: p.color(200, 0, 0) },
         red : { id: 7, value: p.color(0, 255, 255) },
         cyan : { id: 8, value: p.color(255, 90, 0) },

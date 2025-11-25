@@ -2,10 +2,16 @@ import p5 from "p5";
 import BaseObject from "../BaseObject";
 import type Inventory from "../Inventory";
 
+export class ItemOptions {
+    public isStackable: boolean = false;
+}
+
 export default class Item extends BaseObject {
     protected name: string;
 
     protected isPicked: boolean = false;
+    
+    protected itemOption: ItemOptions = { isStackable: true };
 
     protected creationTime: number;
 
