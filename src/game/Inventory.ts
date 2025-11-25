@@ -17,8 +17,11 @@ export default class Inventory {
 
     private cellSelected: number = 0; // From 0 to 4 
 
-    private keysBinded = ['&', 'é', '"', '\'', '(']
+    private inventoryKeys = ['&', 'é', '"', '\'', '('];
+    private dropUsed = false;
     
+    public onItemDropped?: (itemDropped: Item) => void;
+
     constructor() {
         this.slots = [undefined, undefined, undefined, undefined, undefined];
     }
@@ -66,15 +69,28 @@ export default class Inventory {
 
     public UpdateControls(p5: p5): void {
         if (!p5.keyIsPressed) {
+            this.dropUsed = false;
             return;
         }
 
-        this.keysBinded.forEach((keyBinded, index) => {
+        this.inventoryKeys.forEach((keyBinded, index) => {
             if (p5.keyIsDown(keyBinded)) {
                 this.cellSelected = index;
             }
-
         });
+
+        if (p5.keyIsDown('a') && !this.dropUsed) {
+            this.dropUsed = true;
+            const slotUsed = this.slots[this.cellSelected];
+
+            if (slotUsed && slotUsed.quantity >= 1) {
+                slotUsed.item.setIsPicked(false);
+                this.onItemDropped?.(slotUsed.item.clone());
+                slotUsed.quantity -= 1;
+
+                if (slotUsed.quantity < 1) this.slots[this.cellSelected] = undefined;
+            }
+        }
     }
 
     public draw(p: p5): void {

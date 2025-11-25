@@ -20,7 +20,7 @@ export default class Scene {
         this.map.addItem(new Gun(15.5 * Map.CELL_SIZE, 12.5 * Map.CELL_SIZE));
         this.map.addItem(new Box(15.5 * Map.CELL_SIZE, 10.5 * Map.CELL_SIZE));
 
-        this.player = new Player(p5, this.map.getCells().length/2 * Map.CELL_SIZE, this.map.getCells()[0].length/2 * Map.CELL_SIZE);
+        this.player = new Player(this.map, this.map.getCells().length/2 * Map.CELL_SIZE, this.map.getCells()[0].length/2 * Map.CELL_SIZE);
         
         this.camera = new Camera(this.p5, this.player, 2);
     }
@@ -31,7 +31,7 @@ export default class Scene {
 
     public draw(): void {
         // Update player controls
-        this.player.UpdateControls(this.map);
+        this.player.UpdateControls(this.p5);
 
         this.p5.push();
         this.p5.scale(this.camera.getZoom(), this.camera.getZoom());        

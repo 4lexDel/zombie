@@ -50,4 +50,15 @@ export default class Item extends BaseObject {
     public drawIcon(p5: p5, x: number, y: number, width: number, height: number): void {
         throw new Error("Method not implemented.");
     }
+
+    public clone() {
+        const instanceCloned = Object.assign(
+            Object.create(Object.getPrototypeOf(this)),
+            this
+        );
+
+        instanceCloned.identifier = Symbol();
+
+        return instanceCloned;
+    }
 }
