@@ -9,6 +9,6 @@ export default class Weapon extends Item {
         this.damage = damage;
         this.range = range;
 
-        this.itemOption.isStackable = false;
+        this.itemOptions.isStackable = false;
     }
 }

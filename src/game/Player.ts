@@ -4,6 +4,7 @@ import Map from "./Map";
 import Inventory from "./Inventory";
 import Gun from "./item/Gun";
 import Box from "./item/Box";
+import Item from "./item/Item";
 
 export default class Player extends BaseObject {
     public static DIAMETER: number = 30;
@@ -54,12 +55,8 @@ export default class Player extends BaseObject {
         }
 
         // No movement
-        if (dx === 0 && dy === 0) {
-            return;
-        }
-        else {
-            this.directionFacing = newDirectionFacing;
-        }
+        if (dx === 0 && dy === 0) return;
+        else this.directionFacing = newDirectionFacing;
 
         // Normalize diagonal speed so total speed remains constant
         const len = Math.hypot(dx, dy);
@@ -96,9 +93,22 @@ export default class Player extends BaseObject {
             }
         }
 
+        // No movement allowed
+        if (!canMoveX && !canMoveY) return;
+
         // Apply movement on axes that are clear
         if (canMoveX) this.x = newX;
         if (canMoveY) this.y = newY;
+
+        // Check items collision
+        map.getItems().forEach((newItem: Item) => {
+            let d = this.p5.dist(newItem.getX(), newItem.getY(), this.x, this.y);
+            if (d < Map.CELL_SIZE) {                
+                // Try to collect the item
+                this.inventory.addItem(newItem);
+            }
+        });
+        map.clearItemsPicked();
     }
 
     public resize(width: number, height: number): void {

@@ -55,6 +55,8 @@ A zombie survivor game
     * Save & load system (create a format)
     * Edit mode
     * Wave system for the zombies (include it to the save)
+- Sound
+- Allow the player to select it's own keys
 
 <br>
 

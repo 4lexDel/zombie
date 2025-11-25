@@ -11,7 +11,7 @@ export default class Item extends BaseObject {
 
     protected isPicked: boolean = false;
     
-    protected itemOption: ItemOptions = { isStackable: true };
+    protected itemOptions: ItemOptions = { isStackable: true };
 
     protected creationTime: number;
 
@@ -33,6 +33,14 @@ export default class Item extends BaseObject {
 
     public getName(): string {
         return this.name;
+    }
+
+    public getItemOptions(): ItemOptions {
+        return this.itemOptions;
+    }
+
+    public getIsPicked(): boolean {
+        return this.isPicked;
     }
 
     public draw(p5: p5): void {

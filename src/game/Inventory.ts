@@ -30,15 +30,38 @@ export default class Inventory {
         this.inventoryPadding = this.cellSize * 0.2;
     }
 
-    addItem(item: Item, quantity: number = 1): boolean {
-        for (let i = 0; i < Inventory.MAX_ITEMS; i++) {
-            if (!this.slots[i]) {
-                this.slots[i] = { item, quantity};
-                item.setIsPicked(true);
+    public getSlots(): [Slot?, Slot?, Slot?, Slot?, Slot?] {
+        return this.slots;
+    }
+
+    public addItem(newItem: Item, quantity: number = 1): boolean {
+        // Already collected ?
+        if (newItem.getIsPicked()) return false;
+
+        // Stackable version
+        if (newItem.getItemOptions().isStackable) {            
+            const sameItem = this.slots.find((slot: Slot | undefined) => slot && slot.item.getName() === newItem.getName());
+            if (sameItem) {
+                sameItem.quantity += quantity;
+                newItem.setIsPicked(true);
                 return true;
             }
         }
+
+        // Normal
+        for (let i = 0; i < this.slots.length; i++) {
+            if (!this.slots[i]) {
+                this.slots[i] = { item: newItem, quantity: quantity };
+                newItem.setIsPicked(true);
+                return true;
+            }
+        }
+
         return false;
+    }
+
+    public isFull(): boolean {
+        return this.slots.every((slot) => !!slot);
     }
 
     public UpdateControls(p5: p5): void {

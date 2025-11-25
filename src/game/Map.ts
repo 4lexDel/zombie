@@ -75,6 +75,14 @@ export default class Map {
         return this.cells;
     }
 
+    public getItems(): Item[] {
+        return this.items;
+    }
+
+    public clearItemsPicked(): void {
+        this.items = this.items.filter((item: Item) => !item.getIsPicked());
+    }
+
     public draw(p5: p5, camera: Camera): void {
         // Draw cells
         for (let x = 0; x < this.cells.length; x++) {
