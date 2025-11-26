@@ -2,6 +2,7 @@ import p5 from "p5";
 import BaseObject from "../BaseObject";
 import type Inventory from "../Inventory";
 import Map from "../Map";
+import type Entity from "../entity/Entity";
 
 export class ItemOptions {
     public isStackable: boolean = false;
@@ -14,7 +15,7 @@ export default class Item extends BaseObject {
     
     protected itemOptions: ItemOptions = { isStackable: true };
 
-    protected creationTime: number;
+    protected creationTime!: number;
 
     protected radius: number = Map.CELL_SIZE/2;
 
@@ -22,6 +23,10 @@ export default class Item extends BaseObject {
         super(x, y);
         this.name = name;
 
+        this.resetCreationTime()
+    }
+
+    public resetCreationTime(): void {
         this.creationTime = Date.now();
     }
 
@@ -48,6 +53,10 @@ export default class Item extends BaseObject {
 
     public getRadius(): number {
         return this.radius;
+    }
+
+    public use(originEntity: Entity, map: Map): boolean {
+        throw new Error("Method not implemented.");
     }
 
     public draw(p5: p5): void {

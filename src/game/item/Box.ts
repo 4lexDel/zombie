@@ -1,6 +1,9 @@
 import p5 from "p5";
 import Item from "./Item";
 import { COLORS } from "../../colors";
+import Entity from "../entity/Entity";
+import Map from "../Map";
+import BoxCell from "../cell/Box";
 
 export default class Box extends Item {
     private size = 30;
@@ -8,6 +11,37 @@ export default class Box extends Item {
     constructor(x: number = 0, y: number = 0) {
         super("Box", x, y);
         this.radius = 20;
+    }
+
+    public use(originEntity: Entity, map: Map): boolean {
+        const entityAngleFacing = originEntity.getAngleFacing();
+
+        const tx = originEntity.getX() + Math.cos(entityAngleFacing) * Map.CELL_SIZE;
+        const ty = originEntity.getY() + Math.sin(entityAngleFacing) * Map.CELL_SIZE;
+
+        const boxIndexCoords = Map.parseCoordsToCell(tx, ty);
+        
+        const cell = map.getCell(tx, ty);
+        if (!cell || cell.getCellOptions().isSolid) return false;
+        
+        const success = map.setCell(tx, ty, new BoxCell(boxIndexCoords.cellX, boxIndexCoords.cellY, Map.CELL_SIZE, Map.CELL_SIZE));
+
+        // The following bloc is used to avoid block glitch
+        if (success) {
+            const entityDirectionFacing = originEntity.getDirectionFacing();
+            const entityIndexCoords = Map.parseCoordsToCell(
+                originEntity.getX() + entityDirectionFacing.x * originEntity.getDiameter()/2,
+                originEntity.getY() + entityDirectionFacing.y * originEntity.getDiameter()/2
+            );
+            
+            // Are the entity and the box in the same spot ?
+            if (entityIndexCoords.cellX === boxIndexCoords.cellX && entityIndexCoords.cellY === boxIndexCoords.cellY) {
+                entityDirectionFacing.x && originEntity.setX((boxIndexCoords.cellX - entityDirectionFacing.x) * Map.CELL_SIZE + Map.CELL_SIZE/2);
+                entityDirectionFacing.y && originEntity.setY((boxIndexCoords.cellY - entityDirectionFacing.y) * Map.CELL_SIZE + Map.CELL_SIZE/2);
+            }
+        }
+
+        return success;
     }
 
     public draw(p5: p5): void {

@@ -1,5 +1,7 @@
 import p5 from "p5";
 import Weapon from "./Weapon";
+import type Entity from "../entity/Entity";
+import type Map from "../Map";
 
 export default class Gun extends Weapon {
     private width: number = 30;
@@ -8,6 +10,10 @@ export default class Gun extends Weapon {
     constructor(x: number = 0, y: number = 0) {
         super("Gun", 10, 2, x, y);
         this.radius = 20;
+    }
+
+    public use(originEntity: Entity, map: Map): boolean {       
+        return false;
     }
 
     public draw(p5: p5): void {

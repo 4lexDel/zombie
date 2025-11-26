@@ -24,6 +24,23 @@ export default class Entity extends BaseObject {
         this.color = COLORS.blue;
     }
 
+    public getDiameter(): number {
+        return this.diameter;
+    }
+
+    public getDirectionFacing(): { x: number; y: number } {
+        return this.directionFacing;
+    }
+
+    public getAngleFacing(): number {
+        if (this.directionFacing.x === 0) {
+            return this.directionFacing.y > 0 ? Math.PI / 2 : -Math.PI / 2;
+        }
+        let angle = Math.atan(this.directionFacing.y / this.directionFacing.x);
+        if (this.directionFacing.x < 0) angle += Math.PI;
+        return angle;
+    }
+
     // Method called by the pathfinding system to set the paths for this entity
     public setPaths(paths: { nextX: number; nextY: number, cost: number }[][]): void {
         this.paths = paths;
@@ -79,16 +96,7 @@ export default class Entity extends BaseObject {
         p.translate(this.x, this.y)
         p.ellipse(0, 0, this.diameter, this.diameter);
 
-        let angle = 0;
-        
-        if (this.directionFacing.x !== 0) {
-            angle = p.atan(this.directionFacing.y / this.directionFacing.x);
-        }
-        else {
-            angle = this.directionFacing.y > 0 ? p.PI/2 : -p.PI/2;
-        }
-
-        if (this.directionFacing.x < 0) angle += p.PI;
+        let angle = this.getAngleFacing();
 
         let deltaAngle = p.PI / 9;
 

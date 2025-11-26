@@ -6,6 +6,7 @@ import Box from "../item/Box";
 import Item from "../item/Item";
 import Entity from "./Entity";
 import { COLORS } from "../../colors";
+import Utils from "../../tools/Utils";
 
 export default class Player extends Entity {   
     private map: Map;
@@ -139,8 +140,10 @@ export default class Player extends Entity {
 
             if (itemDropped) {
                 const len = Math.hypot(this.directionFacing.x, this.directionFacing.y);
-                let newX = this.x + (this.directionFacing.x / len) * 1.5 * Map.CELL_SIZE;
-                let newY = this.y + (this.directionFacing.y / len) * 1.5 * Map.CELL_SIZE;
+                const range = Utils.getRandomNumber(1.4, 1.7);
+
+                let newX = this.x + (this.directionFacing.x / len) * Map.CELL_SIZE * range;
+                let newY = this.y + (this.directionFacing.y / len) * Map.CELL_SIZE * range;
     
                 itemDropped.setX(newX);
                 itemDropped.setY(newY);
@@ -153,7 +156,9 @@ export default class Player extends Entity {
 
         if (p.keyIsDown(' ') && !this.actionUsed) {
             this.actionUsed = true;
-            console.log("ITEM ACTION");
+
+            const success = this.inventory.getItemSelected()?.use(this, this.map);
+            if (success) this.inventory.removeItemFromCurrentSlot();             
         } else if (!p.keyIsDown(' ')) {
             this.actionUsed = false;
         }

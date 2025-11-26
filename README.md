@@ -57,6 +57,7 @@ A zombie survivor game
 - Sound
 - Allow the player to select it's own keys
 - Can't drop an item on a wall???
+- Can't place a block on a Zombie!!
 
 <br>
 

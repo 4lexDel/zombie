@@ -2,6 +2,7 @@ import p5 from "p5";
 import BaseObject from "../BaseObject";
 import { COLORS, type ColorOption } from "../../colors";
 import Item from "../item/Item";
+import Map from "../Map";
 
 export class CellOptions {
     public isSolid: boolean = false;
@@ -16,7 +17,7 @@ export default class Cell extends BaseObject {
 
     protected itemUsed: Item | null = null;
 
-    constructor(x: number, y: number, dx: number = 50, dy: number = 50, cellOptions?: CellOptions) {
+    constructor(x: number, y: number, dx: number = Map.CELL_SIZE, dy: number = Map.CELL_SIZE, cellOptions?: CellOptions) {
         super(x, y);
         this.dx = dx;
         this.dy = dy;

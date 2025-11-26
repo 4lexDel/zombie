@@ -15,7 +15,7 @@ export default class Inventory {
 
     private slots: [Slot?, Slot?, Slot?, Slot?, Slot?];
 
-    private cellSelected: number = 0; // From 0 to 4 
+    private indexSelected: number = 0; // From 0 to 4 
 
     private inventoryKeys = ['&', 'é', '"', '\'', '('];
     
@@ -32,6 +32,14 @@ export default class Inventory {
 
     public getSlots(): [Slot?, Slot?, Slot?, Slot?, Slot?] {
         return this.slots;
+    }
+
+    public getIndexSelected(): number {
+        return this.indexSelected;
+    }
+
+    public getItemSelected(): Item | undefined {
+        return this.slots[this.indexSelected]?.item;
     }
 
     public addItem(newItem: Item, quantity: number = 1): boolean {
@@ -60,6 +68,20 @@ export default class Inventory {
         return false;
     }
 
+    public removeItemByIndex(index: number): void {
+        const slot = this.slots[index];
+
+        if (slot && slot.quantity >= 1) {
+            slot.quantity -= 1;
+
+            if (slot.quantity < 1) this.slots[index] = undefined;
+        }
+    }
+
+    public removeItemFromCurrentSlot(): void {
+        this.removeItemByIndex(this.indexSelected);
+    }
+
     public isFull(): boolean {
         return this.slots.every((slot) => !!slot);
     }
@@ -71,21 +93,20 @@ export default class Inventory {
 
         this.inventoryKeys.forEach((keyBinded, index) => {
             if (p5.keyIsDown(keyBinded)) {
-                this.cellSelected = index;
+                this.indexSelected = index;
             }
         });
     }
 
     public dropCurrentItem(): Item | null {
-        const slotUsed = this.slots[this.cellSelected];
+        const slotUsed = this.slots[this.indexSelected];
 
         if (slotUsed && slotUsed.quantity >= 1) {
             const itemDropped = slotUsed.item.clone();
             itemDropped.setIsPicked(false);
+            itemDropped.resetCreationTime();
 
-            slotUsed.quantity -= 1;
-
-            if (slotUsed.quantity < 1) this.slots[this.cellSelected] = undefined;
+            this.removeItemByIndex(this.indexSelected);
 
             return itemDropped;
         }
@@ -110,8 +131,8 @@ export default class Inventory {
         this.slots.forEach((slot, index) => {
             let sx = ox + index * (this.cellSize + this.cellGap); 
 
-            p.stroke(index === this.cellSelected ? COLORS.orange.value : COLORS.black.value);
-            p.strokeWeight(index === this.cellSelected ? 6 : 3);
+            p.stroke(index === this.indexSelected ? COLORS.orange.value : COLORS.black.value);
+            p.strokeWeight(index === this.indexSelected ? 6 : 3);
             p.noFill();
             p.rect(
                 sx, 

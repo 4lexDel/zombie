@@ -64,13 +64,23 @@ export default class Map {
     }
 
     public getCell(x: number, y: number): Cell | null {
-        let cx = Math.floor(x / Map.CELL_SIZE);
-        let cy = Math.floor(y / Map.CELL_SIZE);
+        const { cellX: cx, cellY: cy } = Map.parseCoordsToCell(x, y);
 
         if (cx < 0 || cy < 0 || cx >= this.cells.length || cy >= this.cells[0].length) {
             return null;
         }
         return this.cells[cx][cy];
+    }
+
+    public setCell(x: number, y: number, newCell: Cell): boolean {
+        const { cellX: cx, cellY: cy } = Map.parseCoordsToCell(x, y);
+
+        if (cx < 0 || cy < 0 || cx >= this.cells.length || cy >= this.cells[0].length) {
+            return false;
+        }
+        this.cells[cx][cy] = newCell;
+
+        return true;
     }
 
     public addItem(item: Item): void {
