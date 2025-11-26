@@ -65,6 +65,8 @@ A zombie survivor game
 - Normalize the variable name (p vs p5...)
 - Clean the useless code
 
+- Refactor the item action management (reset booleans...)
+
 - Every elements drawn after the player are missplaced??? => why?? >> because of the nested push/pop???
 
 ## Technical documentation

@@ -12,6 +12,9 @@ export default class Player extends Entity {
     
     private inventory: Inventory;
 
+    private dropUsed = false;
+    private actionUsed = false;
+
     constructor(map: Map, x: number = 0, y: number = 0) {
         super(x, y);
 
@@ -25,34 +28,28 @@ export default class Player extends Entity {
         this.diameter = 30;
         this.speed = 6;
         this.color = COLORS.green;
-
-        this.initEvent();
     }
 
-    private initEvent(): void {
-        this.inventory.onItemDropped = (itemDropped: Item) => {
-            const len = Math.hypot(this.directionFacing.x, this.directionFacing.y);
-            let newX = this.x + (this.directionFacing.x / len) * Map.CELL_SIZE;
-            let newY = this.y + (this.directionFacing.y / len) * Map.CELL_SIZE;
-
-            itemDropped.setX(newX);
-            itemDropped.setY(newY);
-
-            this.map.addItem(itemDropped);
-        }
+    private resetBoleansControl(): void {
+        this.dropUsed = false;
+        this.actionUsed = false;
     }
+
 
     public updateControls(p: p5): void {
         if (!p.keyIsPressed) {
+            this.resetBoleansControl();
             return;
         }
 
-        this.manageCellCollisions(p);
+        this.handleCellCollisions(p);
 
-        this.manageItemCollisions(p);
+        this.handleItemCollisions(p);
+
+        this.handleItemControls(p);
     }
 
-    public manageCellCollisions(p: p5): void {
+    public handleCellCollisions(p: p5): void {
         let newDirectionFacing = { x:0, y: 0 };
             
         let dx = 0;
@@ -122,7 +119,7 @@ export default class Player extends Entity {
         if (canMoveY) this.y = newY;
     }
 
-    public manageItemCollisions(p: p5): void {
+    public handleItemCollisions(p: p5): void {
         // Check items collision
         this.map.getItems().forEach((newItem: Item) => {
             let d = p.dist(newItem.getX(), newItem.getY(), this.x, this.y);
@@ -132,6 +129,34 @@ export default class Player extends Entity {
             }
         });
         this.map.clearItemsPicked();
+    }
+
+    public handleItemControls(p: p5): void {
+        if (p.keyIsDown('a') && !this.dropUsed) {
+            this.dropUsed = true;
+            
+            const itemDropped = this.inventory.dropCurrentItem();
+
+            if (itemDropped) {
+                const len = Math.hypot(this.directionFacing.x, this.directionFacing.y);
+                let newX = this.x + (this.directionFacing.x / len) * 1.5 * Map.CELL_SIZE;
+                let newY = this.y + (this.directionFacing.y / len) * 1.5 * Map.CELL_SIZE;
+    
+                itemDropped.setX(newX);
+                itemDropped.setY(newY);
+    
+                this.map.addItem(itemDropped);
+            }
+        } else if (!p.keyIsDown('a')) {
+            this.dropUsed = false;
+        }
+
+        if (p.keyIsDown(' ') && !this.actionUsed) {
+            this.actionUsed = true;
+            console.log("ITEM ACTION");
+        } else if (!p.keyIsDown(' ')) {
+            this.actionUsed = false;
+        }
     }
 
     public resize(width: number, height: number): void {
