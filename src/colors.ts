@@ -28,7 +28,7 @@ export function initColors(p: p5) {
         blue : { id: 4, value: p.color(0, 120, 255) },
         orange : { id: 5, value: p.color(240, 126, 0) },
         purple : { id: 6, value: p.color(200, 0, 0) },
-        red : { id: 7, value: p.color(0, 255, 255) },
+        red : { id: 7, value: p.color(200, 0, 0) },
         cyan : { id: 8, value: p.color(255, 90, 0) },
         clay : { id: 9, value: p.color(255, 170, 0) },
         pink : { id: 10, value: p.color(220, 80, 150) },

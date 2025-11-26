@@ -1,21 +1,16 @@
 import p5 from "p5";
-import BaseObject from "./BaseObject";
-import Map from "./Map";
-import Inventory from "./Inventory";
-import Gun from "./item/Gun";
-import Box from "./item/Box";
-import Item from "./item/Item";
+import Map from "../Map";
+import Inventory from "../Inventory";
+import Gun from "../item/Gun";
+import Box from "../item/Box";
+import Item from "../item/Item";
+import Entity from "./Entity";
+import { COLORS } from "../../colors";
 
-export default class Player extends BaseObject {
-    public static DIAMETER: number = 30;
-    
+export default class Player extends Entity {   
     private map: Map;
     
     private inventory: Inventory;
-
-    private speed: number = 6;
-
-    private directionFacing = { x: 1, y: 0 };
 
     constructor(map: Map, x: number = 0, y: number = 0) {
         super(x, y);
@@ -26,6 +21,10 @@ export default class Player extends BaseObject {
 
         this.inventory.addItem(new Gun());
         this.inventory.addItem(new Box(), 5);
+
+        this.diameter = 30;
+        this.speed = 6;
+        this.color = COLORS.green;
 
         this.initEvent();
     }
@@ -88,10 +87,10 @@ export default class Player extends BaseObject {
         // Check collision for X-axis movement
         let canMoveX = true;
         const xCorners = [
-            { x: newX - Player.DIAMETER / 2, y: this.y - Player.DIAMETER / 2 },
-            { x: newX - Player.DIAMETER / 2, y: this.y + Player.DIAMETER / 2 },
-            { x: newX + Player.DIAMETER / 2, y: this.y - Player.DIAMETER / 2 },
-            { x: newX + Player.DIAMETER / 2, y: this.y + Player.DIAMETER / 2 },
+            { x: newX - this.diameter / 2, y: this.y - this.diameter / 2 },
+            { x: newX - this.diameter / 2, y: this.y + this.diameter / 2 },
+            { x: newX + this.diameter / 2, y: this.y - this.diameter / 2 },
+            { x: newX + this.diameter / 2, y: this.y + this.diameter / 2 },
         ];
         for (const corner of xCorners) {
             if (this.map.getCell(corner.x, corner.y)?.getCellOptions().isSolid) {
@@ -103,10 +102,10 @@ export default class Player extends BaseObject {
         // Check collision for Y-axis movement
         let canMoveY = true;
         const yCorners = [
-            { x: this.x - Player.DIAMETER / 2, y: newY - Player.DIAMETER / 2 },
-            { x: this.x + Player.DIAMETER / 2, y: newY - Player.DIAMETER / 2 },
-            { x: this.x - Player.DIAMETER / 2, y: newY + Player.DIAMETER / 2 },
-            { x: this.x + Player.DIAMETER / 2, y: newY + Player.DIAMETER / 2 },
+            { x: this.x - this.diameter / 2, y: newY - this.diameter / 2 },
+            { x: this.x + this.diameter / 2, y: newY - this.diameter / 2 },
+            { x: this.x - this.diameter / 2, y: newY + this.diameter / 2 },
+            { x: this.x + this.diameter / 2, y: newY + this.diameter / 2 },
         ];
         for (const corner of yCorners) {
             if (this.map.getCell(corner.x, corner.y)?.getCellOptions().isSolid) {
@@ -127,7 +126,7 @@ export default class Player extends BaseObject {
         // Check items collision
         this.map.getItems().forEach((newItem: Item) => {
             let d = p.dist(newItem.getX(), newItem.getY(), this.x, this.y);
-            if (d < Player.DIAMETER/2 + newItem.getRadius()) {                
+            if (d < this.diameter/2 + newItem.getRadius()) {                
                 // Try to collect the item
                 this.inventory.addItem(newItem);
             }
@@ -140,32 +139,7 @@ export default class Player extends BaseObject {
     }
 
     public draw(p: p5): void {
-        p.fill(0, 200, 0);
-        p.stroke(0);
-        p.strokeWeight(1);
-        
-        p.push();
-        p.translate(this.x, this.y)
-        p.ellipse(0, 0, Player.DIAMETER, Player.DIAMETER);
-
-        let angle = 0;
-        
-        if (this.directionFacing.x !== 0) {
-            angle = p.atan(this.directionFacing.y / this.directionFacing.x);
-        }
-        else {
-            angle = this.directionFacing.y > 0 ? p.PI/2 : -p.PI/2;
-        }
-
-        if (this.directionFacing.x < 0) angle += p.PI;
-
-        let deltaAngle = p.PI / 9;
-
-        p.fill(0);
-        p.ellipse(Player.DIAMETER/2 * p.cos(angle+deltaAngle), Player.DIAMETER/2 * p.sin(angle+deltaAngle), Player.DIAMETER/5, Player.DIAMETER/5);
-        p.ellipse(Player.DIAMETER/2 * p.cos(angle-deltaAngle), Player.DIAMETER/2 * p.sin(angle-deltaAngle), Player.DIAMETER/5, Player.DIAMETER/5);
-
-        p.pop();
+        super.draw(p);
 
         this.inventory.draw(p);
     }
