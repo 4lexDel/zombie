@@ -7,11 +7,13 @@ export default class Zombie extends Entity {
         super(x, y);
 
         this.diameter = 40;
-        this.speed = 4;
+        this.speed = Math.random() * 2 + 1.5;
         this.color = COLORS.red;
     }
 
     public draw(p: p5): void {
         super.draw(p);
+
+        this.move();
     }
 }

@@ -1,6 +1,7 @@
 import p5 from "p5";
 import BaseObject from "../BaseObject";
 import { COLORS, type ColorOption } from "../../colors";
+import Map from "../Map";
 
 export default class Entity extends BaseObject {
     protected diameter: number = 30;
@@ -14,6 +15,9 @@ export default class Entity extends BaseObject {
     // Variable used to store paths provided by the pathfinding algorithm if the entity has subscribed to it
     protected paths: { nextX: number; nextY: number, cost: number }[][] = [];
 
+    // Nexpoint in the path to follow
+    protected interestPoint: { x: number; y: number } | null = null;
+
     constructor(x: number = 0, y: number = 0) {
         super(x, y);
 
@@ -23,7 +27,47 @@ export default class Entity extends BaseObject {
     // Method called by the pathfinding system to set the paths for this entity
     public setPaths(paths: { nextX: number; nextY: number, cost: number }[][]): void {
         this.paths = paths;
-        // console.log(paths);
+        this.interestPoint = this.getNextInterestPoint();
+    }
+
+    private getNextInterestPoint(): { x: number; y: number } | null {
+        let cellX = Map.parseCoordsToCell(this.x, this.y).cellX;
+        let cellY = Map.parseCoordsToCell(this.x, this.y).cellY;
+
+        if (cellX < 0 || cellY < 0 || cellX >= this.paths.length || cellY >= this.paths[0].length) {
+            return null;
+        }
+
+        const path = this.paths[cellX][cellY];
+        if (!path || (path.nextX === -1 && path.nextY === -1)) {
+            return null;
+        }
+
+        return { x: path.nextX * Map.CELL_SIZE + Map.CELL_SIZE / 2, y: path.nextY * Map.CELL_SIZE + Map.CELL_SIZE / 2 };
+    }
+
+    public move(): void {
+        if (!this.interestPoint) {
+            this.interestPoint = this.getNextInterestPoint();
+            if (!this.interestPoint) {
+                return;
+            }
+        }
+
+        const dirX = this.interestPoint.x - this.x;
+        const dirY = this.interestPoint.y - this.y;
+        const len = Math.hypot(dirX, dirY);
+        this.directionFacing = { x: dirX / len, y: dirY / len };
+
+        const moveX = (dirX / len) * this.speed;
+        const moveY = (dirY / len) * this.speed;
+        this.x += moveX;
+        this.y += moveY;
+
+        // If close enough to the interest point, clear it
+        if (Math.hypot(this.x - this.interestPoint.x, this.y - this.interestPoint.y) < this.speed) {
+            this.interestPoint = null;
+        }
     }
 
     public draw(p: p5): void {

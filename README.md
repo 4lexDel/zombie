@@ -42,9 +42,12 @@ A zombie survivor game
 - Shoot
     * Bullet behavior (lifetime)
 - Add the zombies
-    * Design
     * Pathfinder (include the break time)
     * Attack
+    * Avoid the zombies stacks!
+        + At then end (or anytime) of the run detect the zombies around and stop the movement?
+        + Consider a zombie like a non-passable block???? => hard to implement in the pathfinder!!
+        + Add a small knockback when two (or more) zombies are closed
 - Traps
 - Special weapon
 - Game design

@@ -38,12 +38,6 @@ export default class Pathfinder {
         this.subscribedEntities.delete(entity);
     }
 
-    public parseCoordsToCell(x: number, y: number): { cellX: number; cellY: number } {
-        const cellX = Math.floor(x / Map.CELL_SIZE);
-        const cellY = Math.floor(y / Map.CELL_SIZE);
-        return { cellX, cellY };
-    }
-
     public refreshPaths(): void {
         const cells = this.map.getCells();
 
@@ -59,8 +53,7 @@ export default class Pathfinder {
             cost: 0
         });
 
-        // =====================================> TODO: While every subcribed entity has not been processed
-        while (openList.length > 0) {
+        while (openList.length > 0 && !this.areAllEntitiesReachedTarget(closedList)) {
             // Sort openList by cost (ascending)
             openList.sort((a, b) => a.cost - b.cost);
             currentNode = openList.shift() as Node;
@@ -96,8 +89,8 @@ export default class Pathfinder {
                     const adjacentX2 = currentNode.x;
                     const adjacentY2 = currentNode.y + neighborOffset.y;
                     
-                    if (cells[adjacentX][adjacentY].getCellOptions().isSolid || 
-                        cells[adjacentX2][adjacentY2].getCellOptions().isSolid) {
+                    if (!cells[adjacentX][adjacentY] || cells[adjacentX][adjacentY].getCellOptions().isSolid || 
+                        !cells[adjacentX2][adjacentY2] || cells[adjacentX2][adjacentY2].getCellOptions().isSolid) {
                         continue;
                     }
                 }
@@ -145,6 +138,15 @@ export default class Pathfinder {
         });
     }
 
+    public areAllEntitiesReachedTarget(closedList: Node[]): boolean {
+        for (const entity of this.subscribedEntities) {
+            const entityCell = Map.parseCoordsToCell(entity.getX(), entity.getY());
+            const reached = closedList.find(node => node.x === entityCell.cellX && node.y === entityCell.cellY);
+            if (!reached) return false;
+        }
+        return true;
+    }
+
     public drawCostPaths(p: p5): void {
         /**
          * For each cell, draw the cost to reach the target (number of steps).
@@ -156,7 +158,9 @@ export default class Pathfinder {
         for (let x = 0; x < this.paths.length; x++) {
             for (let y = 0; y < this.paths[0].length; y++) {
                 const path = this.paths[x][y];
-                p.text(path.cost.toString(), x * Map.CELL_SIZE + Map.CELL_SIZE / 2, y * Map.CELL_SIZE + Map.CELL_SIZE / 2);
+
+                let text = path.cost === -1 ? "" : path.cost.toString();
+                p.text(text, x * Map.CELL_SIZE + Map.CELL_SIZE / 2, y * Map.CELL_SIZE + Map.CELL_SIZE / 2);
             }
         }
     }

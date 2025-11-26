@@ -57,6 +57,12 @@ export default class Map {
         this.cells = cells;
     }
 
+    public static parseCoordsToCell(x: number, y: number): { cellX: number; cellY: number } {
+        const cellX = Math.floor(x / Map.CELL_SIZE);
+        const cellY = Math.floor(y / Map.CELL_SIZE);
+        return { cellX, cellY };
+    }
+
     public getCell(x: number, y: number): Cell | null {
         let cx = Math.floor(x / Map.CELL_SIZE);
         let cy = Math.floor(y / Map.CELL_SIZE);

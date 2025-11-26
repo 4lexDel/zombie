@@ -31,8 +31,14 @@ export default class Scene {
 
         this.zombies = [
             new Zombie(5.5 * Map.CELL_SIZE, 5.5 * Map.CELL_SIZE),
-            // new Zombie(18.5 * Map.CELL_SIZE, 8.5 * Map.CELL_SIZE),
-            // new Zombie(10.5 * Map.CELL_SIZE, 15.5 * Map.CELL_SIZE),
+            new Zombie(18.5 * Map.CELL_SIZE, 8.5 * Map.CELL_SIZE),
+            new Zombie(10.5 * Map.CELL_SIZE, 15.5 * Map.CELL_SIZE),
+            new Zombie(20.5 * Map.CELL_SIZE, 14.5 * Map.CELL_SIZE),
+            new Zombie(7.5 * Map.CELL_SIZE, 18.5 * Map.CELL_SIZE),
+            new Zombie(3.5 * Map.CELL_SIZE, 12.5 * Map.CELL_SIZE),
+            new Zombie(16.5 * Map.CELL_SIZE, 4.5 * Map.CELL_SIZE),
+            new Zombie(12.5 * Map.CELL_SIZE, 3.5 * Map.CELL_SIZE),
+            new Zombie(19.5 * Map.CELL_SIZE, 17.5 * Map.CELL_SIZE),
         ];
 
         this.zombies.forEach((zombie: Zombie) => {
@@ -67,7 +73,8 @@ export default class Scene {
             zombie.draw(this.p5);
         });
 
-        this.pathfinder.drawCostPaths(this.p5);
+        // DEBUG PATHFINDER
+        // this.pathfinder.drawCostPaths(this.p5);
         this.player.draw(this.p5);
         
         this.p5.pop();
