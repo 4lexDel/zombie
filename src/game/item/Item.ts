@@ -21,6 +21,8 @@ export default class Item extends BaseObject {
         super(x, y);
         this.name = name;
 
+        this.diameter = Map.CELL_SIZE / 5;
+
         this.resetCreationTime()
     }
 

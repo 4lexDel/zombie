@@ -135,11 +135,20 @@ export default class Player extends Entity {
             const itemDropped = this.inventory.dropCurrentItem();
 
             if (itemDropped) {
-                const len = Math.hypot(this.directionFacing.x, this.directionFacing.y);
-                const range = Utils.getRandomNumber(1.4, 1.7);
+                const angleFacing = this.getAngleFacing();
+                const range = Utils.getRandomNumber(1, 1.2);
 
-                let newX = this.x + (this.directionFacing.x / len) * Map.CELL_SIZE * range;
-                let newY = this.y + (this.directionFacing.y / len) * Map.CELL_SIZE * range;
+                let newX = this.x + Math.cos(angleFacing) * Map.CELL_SIZE * range;
+                let newY = this.y + Math.sin(angleFacing) * Map.CELL_SIZE * range;
+
+                if (this.map.getCell(newX, newY)?.getCellOptions().isSolid) {
+                    const cellCoords = Map.parseCoordsToCell(this.x, this.y);
+                    const centerCellX = cellCoords.cellX * Map.CELL_SIZE + Map.CELL_SIZE / 2;
+                    const centerCellY = cellCoords.cellY * Map.CELL_SIZE + Map.CELL_SIZE / 2;
+
+                    newX = centerCellX + Math.cos(angleFacing) * Map.CELL_SIZE * 0.5;
+                    newY = centerCellY + Math.sin(angleFacing) * Map.CELL_SIZE * 0.5;
+                }
     
                 itemDropped.setX(newX);
                 itemDropped.setY(newY);

@@ -78,9 +78,6 @@ A zombie survivor game
 - Settings 
     * Allow the player to select it's own keys
     * Difficulties
-- Debates
-    * Can't drop an item on a wall???
-    * Can't place a block on a Zombie!!
 
 <br>
 
