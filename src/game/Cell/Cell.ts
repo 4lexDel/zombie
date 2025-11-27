@@ -32,7 +32,7 @@ export default class Cell extends BaseObject {
 
     public draw(p5: p5): void {
         p5.fill(this.cellOptions.color.value);
-        p5.stroke(0);
+        p5.stroke(50);
         p5.strokeWeight(2);
         p5.rect(
             this.x * this.dx,

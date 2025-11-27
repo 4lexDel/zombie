@@ -63,7 +63,7 @@ A zombie survivor game
 - Game design
     * Save & load system (create a format)
         + Content: 
-            - Cells + Entities (player & zombies) + Items
+            - Cells + Entities (player & zombies) + Items + bullets
             - Next Zombie waves
     * Edit mode
     * Wave system for the zombies (include it to the save)
@@ -74,6 +74,7 @@ A zombie survivor game
     * Movement?
     * Zombie hits
     * Player shoot
+    * Bullet hit
 - Settings 
     * Allow the player to select it's own keys
     * Difficulties

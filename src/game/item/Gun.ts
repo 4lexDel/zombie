@@ -1,7 +1,8 @@
 import p5 from "p5";
 import Weapon from "./Weapon";
-import type Entity from "../entity/Entity";
-import type Map from "../Map";
+import Entity from "../entity/Entity";
+import Map from "../Map";
+import Bullet from "../Bullet";
 
 export default class Gun extends Weapon {
     private width: number = 30;
@@ -12,7 +13,19 @@ export default class Gun extends Weapon {
         this.radius = 20;
     }
 
-    public use(originEntity: Entity, map: Map): boolean {       
+    public use(originEntity: Entity, map: Map): boolean {
+        const angleFacing = originEntity.getAngleFacing()
+        
+        map.addBullet(
+            new Bullet(
+                originEntity,
+                originEntity.getX() + Math.cos(angleFacing) * originEntity.getDiameter(),
+                originEntity.getY() + Math.sin(angleFacing) * originEntity.getDiameter(),
+                angleFacing,
+                Bullet.GUN_BULLET
+            )
+        );
+        
         return false;
     }
 

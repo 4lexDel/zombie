@@ -4,6 +4,7 @@ import Camera from "./Camera";
 import Ground from "./cell/Ground";
 import Wall from "./cell/Wall";
 import type Item from "./item/Item";
+import type Bullet from "./Bullet";
 
 export class MapLists {
     public static getDefaultMap(): Cell[][] {
@@ -52,6 +53,7 @@ export default class Map {
     
     private cells: Cell[][];
     private items: Item[] = [];
+    private bullets: Bullet[] = [];
 
     constructor(cells: Cell[][]) {
         this.cells = cells;
@@ -87,6 +89,10 @@ export default class Map {
         this.items.push(item);
     }
 
+    public addBullet(bullet: Bullet): void {
+        this.bullets.push(bullet);
+    }
+
     public getCells(): Cell[][] {
         return this.cells;
     }
@@ -97,6 +103,10 @@ export default class Map {
 
     public clearItemsPicked(): void {
         this.items = this.items.filter((item: Item) => !item.getIsPicked());
+    }
+
+    public clearBulletsKilled(): void {
+        this.bullets = this.bullets.filter((bullet: Bullet) => bullet.getIsAlive());
     }
 
     public draw(p5: p5, camera: Camera): void {
@@ -119,6 +129,17 @@ export default class Map {
             if (item.getY() + Map.CELL_SIZE < camera.getOriginY() || item.getY() - Map.CELL_SIZE > camera.getOriginY() + p5.height / camera.getZoom()) continue;
 
             item.draw(p5);
+        }
+
+        // Draw bullets
+        for (const bullet of this.bullets) {
+            bullet.move(this);
+
+            // Performance optimization (to refacto ?)
+            if (bullet.getX() + Map.CELL_SIZE < camera.getOriginX() || bullet.getX() - Map.CELL_SIZE > camera.getOriginX() + p5.width / camera.getZoom()) continue;
+            if (bullet.getY() + Map.CELL_SIZE < camera.getOriginY() || bullet.getY() - Map.CELL_SIZE > camera.getOriginY() + p5.height / camera.getZoom()) continue;
+            
+            bullet.draw(p5);
         }
     }
 }
