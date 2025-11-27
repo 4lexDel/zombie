@@ -33,35 +33,61 @@ A zombie survivor game
 <br>
 
 ## Features
-- Manage performance!
-    * Display the content on the screen only    > done but can be improved by breaking the loop when possible
-    * Avoid useless refreshing
-    * Set the FPS  (use an alternative based on the time)
-    * Check on google
-- Place a block
-- Shoot
-    * Bullet behavior (lifetime)
-- Add the zombies
-    * Pathfinder (include the break time)
-    * Attack
+- Market => circle modal?
+    * Buy
+        + Weapons
+        + Wall? (unbreakable!!)
+        + Box
+- Item
+    * Health boost (candy, syringe)
+- Player
+    * Life system
+    * Shoot
+        + Bullet behavior (lifetime) (use the "use" method)
+        + Block breaking
+    * Heal
+    * Collect the golds
+- Zombies
+    * Life system
+    * Can drop some gold if he dies
+    * Pathfinder > include the break time
+    * Attack > cooldown / damage / range / life...
+    * Block breaking
     * Avoid the zombies stacks!
         + At then end (or anytime) of the run detect the zombies around and stop the movement?
         + Consider a zombie like a non-passable block???? => hard to implement in the pathfinder!!
         + Add a small knockback when two (or more) zombies are closed
-- Traps
-- Special weapon
+- Specials weapons
+    * Traps blocks
+    * Riffle/machine gun
 - Game design
     * Save & load system (create a format)
+        + Content: 
+            - Cells + Entities (player & zombies) + Items
+            - Next Zombie waves
     * Edit mode
     * Wave system for the zombies (include it to the save)
-- Sound
-- Allow the player to select it's own keys
-- Can't drop an item on a wall???
-- Can't place a block on a Zombie!!
+- Sounds
+    * Music??
+    * Item slot switch
+    * Block placed
+    * Movement?
+    * Zombie hits
+    * Player shoot
+- Settings 
+    * Allow the player to select it's own keys
+    * Difficulties
+- Debates
+    * Can't drop an item on a wall???
+    * Can't place a block on a Zombie!!
 
 <br>
 
 ## Technical story
+- Manage performance!
+    * Display the content on the screen only    > done but can be improved by breaking the loop when possible
+    * Avoid useless refreshing
+    * Set the FPS  > use an alternative based on the time? (usefull for the time dependent actions)
 - Refactor the rotate item (DRY)
 - Normalize the variable name (p vs p5...)
 - Clean the useless code
