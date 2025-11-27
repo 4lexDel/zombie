@@ -10,7 +10,6 @@ export default class Box extends Item {
 
     constructor(x: number = 0, y: number = 0) {
         super("Box", x, y);
-        this.radius = 20;
     }
 
     public use(originEntity: Entity, map: Map): boolean {
@@ -24,6 +23,15 @@ export default class Box extends Item {
         const cell = map.getCell(tx, ty);
         if (!cell || cell.getCellOptions().isSolid) return false;
         
+        const zombies = map.getZombies();
+        for (let i = 0; i < zombies.length; i++) {
+            const zombie = zombies[i];
+            const zombieIndexCoords = Map.parseCoordsToCell(zombie.getX(), zombie.getY());
+            if (zombieIndexCoords.cellX === boxIndexCoords.cellX && zombieIndexCoords.cellY === boxIndexCoords.cellY) {
+                return false;
+            }            
+        }
+
         const success = map.setCell(tx, ty, new BoxCell(boxIndexCoords.cellX, boxIndexCoords.cellY, Map.CELL_SIZE, Map.CELL_SIZE));
 
         // The following bloc is used to avoid block glitch
