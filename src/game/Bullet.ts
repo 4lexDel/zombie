@@ -6,7 +6,6 @@ import Entity from './entity/Entity';
 
 export type BulletOptions = { 
     speed: number,
-    diameter: number,
     lifeTime: number,   // Ms use with creationTime to kill the bullet
     damage: number,
     fragmentQuantityMin: number,    // Nb of bullet shoot (min)
@@ -16,8 +15,7 @@ export type BulletOptions = {
 
 export default class Bullet extends BaseObject {
     public static GUN_BULLET: BulletOptions = { 
-        speed: 12,
-        diameter: 10,
+        speed: 20,
         lifeTime: 1500,
         damage: 3,
         fragmentQuantityMin: 1,
@@ -39,16 +37,22 @@ export default class Bullet extends BaseObject {
         this.creationTime = Date.now();
         this.startAngle = startAngle;
         this.bulletOptions = bulletOptions;
+
+        this.diameter = 10;
     }
 
     public getIsAlive(): boolean {
         return this.isAlive;
     }
 
-    public move(map: Map): void { // false = dead
+    public destroy(map: Map): void {
+        this.isAlive = false;
+        map.clearBulletsKilled();
+    }
+
+    public move(map: Map): void {
         if (Date.now() - this.creationTime >= this.bulletOptions.lifeTime) {
-            this.isAlive = false;
-            map.clearBulletsKilled();
+            this.destroy(map);
             return;
         }
 
@@ -57,9 +61,18 @@ export default class Bullet extends BaseObject {
 
         const cell = map.getCell(newX, newY);
         if (!cell || cell.getCellOptions().isSolid) {
-            this.isAlive = false;
-            map.clearBulletsKilled();
+            this.destroy(map);
             return;
+        }
+
+        const zombies = map.getZombies();
+        for (let i = 0; i < zombies.length; i++) {
+            if (this.isCollidingWith(zombies[i])) {
+                
+                // APPLY THE DAMAGE HERE!!! <--------------------
+                this.destroy(map);
+                return;
+            }
         }
 
         this.x = newX;
@@ -69,6 +82,6 @@ export default class Bullet extends BaseObject {
     public draw(p: p5) {        
         p.fill(COLORS.orange.value);
         p.noStroke();
-        p.ellipse(this.x, this.y, this.bulletOptions.diameter, this.bulletOptions.diameter);
+        p.ellipse(this.x, this.y, this.diameter, this.diameter);
     }
 }

@@ -45,7 +45,7 @@ export default class Player extends Entity {
 
         this.handleCellCollisions(p);
 
-        this.handleItemCollisions(p);
+        this.handleItemCollisions();
 
         this.handleItemControls(p);
     }
@@ -120,14 +120,10 @@ export default class Player extends Entity {
         if (canMoveY) this.y = newY;
     }
 
-    public handleItemCollisions(p: p5): void {
+    public handleItemCollisions(): void {
         // Check items collision
         this.map.getItems().forEach((newItem: Item) => {
-            let d = p.dist(newItem.getX(), newItem.getY(), this.x, this.y);
-            if (d < this.diameter/2 + newItem.getRadius()) {                
-                // Try to collect the item
-                this.inventory.addItem(newItem);
-            }
+            if (this.isCollidingWith(newItem)) this.inventory.addItem(newItem);
         });
         this.map.clearItemsPicked();
     }
@@ -148,13 +144,13 @@ export default class Player extends Entity {
                 itemDropped.setX(newX);
                 itemDropped.setY(newY);
     
-                this.map.addItem(itemDropped);
+                this.map.addItems(itemDropped);
             }
         } else if (!p.keyIsDown('a')) {
             this.dropUsed = false;
         }
 
-        if (p.keyIsDown(' ') && !this.actionUsed) {
+        if (p.keyIsDown(' ') && (!this.actionUsed || true)) {   // <--------------------- Shot auto ?
             this.actionUsed = true;
 
             const success = this.inventory.getItemSelected()?.use(this, this.map);

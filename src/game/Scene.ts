@@ -16,14 +16,14 @@ export default class Scene {
     private map: Map;
     private pathfinder: Pathfinder;
 
-    private zombies: any[] = [];
+    private zombies: Zombie[] = [];
 
     constructor(p5: p5) {
         this.p5 = p5;
         this.map = new Map(MapLists.getDefaultMap());
-        this.map.addItem(new Gun(11.5 * Map.CELL_SIZE, 10.5 * Map.CELL_SIZE));
-        this.map.addItem(new Gun(15.5 * Map.CELL_SIZE, 12.5 * Map.CELL_SIZE));
-        this.map.addItem(new Box(15.5 * Map.CELL_SIZE, 10.5 * Map.CELL_SIZE));
+        this.map.addItems(new Gun(11.5 * Map.CELL_SIZE, 10.5 * Map.CELL_SIZE));
+        this.map.addItems(new Gun(15.5 * Map.CELL_SIZE, 12.5 * Map.CELL_SIZE));
+        this.map.addItems(new Box(15.5 * Map.CELL_SIZE, 10.5 * Map.CELL_SIZE));
 
         this.player = new Player(this.map, this.map.getCells().length/2 * Map.CELL_SIZE, this.map.getCells()[0].length/2 * Map.CELL_SIZE);
 
@@ -31,19 +31,21 @@ export default class Scene {
 
         this.zombies = [
             new Zombie(5.5 * Map.CELL_SIZE, 5.5 * Map.CELL_SIZE),
-            new Zombie(18.5 * Map.CELL_SIZE, 8.5 * Map.CELL_SIZE),
-            new Zombie(10.5 * Map.CELL_SIZE, 15.5 * Map.CELL_SIZE),
-            new Zombie(20.5 * Map.CELL_SIZE, 14.5 * Map.CELL_SIZE),
-            new Zombie(7.5 * Map.CELL_SIZE, 18.5 * Map.CELL_SIZE),
-            new Zombie(3.5 * Map.CELL_SIZE, 12.5 * Map.CELL_SIZE),
-            new Zombie(16.5 * Map.CELL_SIZE, 4.5 * Map.CELL_SIZE),
-            new Zombie(12.5 * Map.CELL_SIZE, 3.5 * Map.CELL_SIZE),
-            new Zombie(19.5 * Map.CELL_SIZE, 17.5 * Map.CELL_SIZE),
+            // new Zombie(18.5 * Map.CELL_SIZE, 8.5 * Map.CELL_SIZE),
+            // new Zombie(10.5 * Map.CELL_SIZE, 15.5 * Map.CELL_SIZE),
+            // new Zombie(20.5 * Map.CELL_SIZE, 14.5 * Map.CELL_SIZE),
+            // new Zombie(7.5 * Map.CELL_SIZE, 18.5 * Map.CELL_SIZE),
+            // new Zombie(3.5 * Map.CELL_SIZE, 12.5 * Map.CELL_SIZE),
+            // new Zombie(16.5 * Map.CELL_SIZE, 4.5 * Map.CELL_SIZE),
+            // new Zombie(12.5 * Map.CELL_SIZE, 3.5 * Map.CELL_SIZE),
+            // new Zombie(19.5 * Map.CELL_SIZE, 17.5 * Map.CELL_SIZE),
         ];
 
         this.zombies.forEach((zombie: Zombie) => {
             this.pathfinder.subscribeEntity(zombie);
         });
+
+        this.map.addZombies(...this.zombies);
         
         this.camera = new Camera(this.p5, this.player, 1);
     }
@@ -68,10 +70,6 @@ export default class Scene {
 
         // Draw scene
         this.map.draw(this.p5, this.camera);
-        
-        this.zombies.forEach((zombie: Zombie) => {
-            zombie.draw(this.p5);
-        });
 
         // DEBUG PATHFINDER
         // this.pathfinder.drawCostPaths(this.p5);

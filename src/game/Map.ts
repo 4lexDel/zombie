@@ -5,6 +5,7 @@ import Ground from "./cell/Ground";
 import Wall from "./cell/Wall";
 import type Item from "./item/Item";
 import type Bullet from "./Bullet";
+import type Zombie from "./entity/Zombie";
 
 export class MapLists {
     public static getDefaultMap(): Cell[][] {
@@ -52,6 +53,8 @@ export default class Map {
     public static CELL_SIZE: number = 50;
     
     private cells: Cell[][];
+
+    private zombies: Zombie[] = [];
     private items: Item[] = [];
     private bullets: Bullet[] = [];
 
@@ -85,12 +88,16 @@ export default class Map {
         return true;
     }
 
-    public addItem(item: Item): void {
-        this.items.push(item);
+    public addZombies(...zombies: Zombie[]): void {
+        this.zombies.push(...zombies);
     }
 
-    public addBullet(bullet: Bullet): void {
-        this.bullets.push(bullet);
+    public addItems(...items: Item[]): void {
+        this.items.push(...items);
+    }
+
+    public addBullets(...bullets: Bullet[]): void {
+        this.bullets.push(...bullets);
     }
 
     public getCells(): Cell[][] {
@@ -99,6 +106,10 @@ export default class Map {
 
     public getItems(): Item[] {
         return this.items;
+    }
+
+    public getZombies(): Zombie[] {
+        return this.zombies;
     }
 
     public clearItemsPicked(): void {
@@ -129,6 +140,17 @@ export default class Map {
             if (item.getY() + Map.CELL_SIZE < camera.getOriginY() || item.getY() - Map.CELL_SIZE > camera.getOriginY() + p5.height / camera.getZoom()) continue;
 
             item.draw(p5);
+        }
+
+        // Draw zombie
+        for (const zombie of this.zombies) {
+            zombie.move();
+
+            // Performance optimization (to refacto ?)
+            if (zombie.getX() + Map.CELL_SIZE < camera.getOriginX() || zombie.getX() - Map.CELL_SIZE > camera.getOriginX() + p5.width / camera.getZoom()) continue;
+            if (zombie.getY() + Map.CELL_SIZE < camera.getOriginY() || zombie.getY() - Map.CELL_SIZE > camera.getOriginY() + p5.height / camera.getZoom()) continue;
+
+            zombie.draw(p5);
         }
 
         // Draw bullets

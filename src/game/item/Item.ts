@@ -17,8 +17,6 @@ export default class Item extends BaseObject {
 
     protected creationTime!: number;
 
-    protected radius: number = Map.CELL_SIZE/2;
-
     constructor(name: string, x: number = 0, y: number = 0) {
         super(x, y);
         this.name = name;
@@ -49,10 +47,6 @@ export default class Item extends BaseObject {
 
     public getIsPicked(): boolean {
         return this.isPicked;
-    }
-
-    public getRadius(): number {
-        return this.radius;
     }
 
     public use(originEntity: Entity, map: Map): boolean {

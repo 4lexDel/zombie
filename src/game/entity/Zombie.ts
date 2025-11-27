@@ -14,7 +14,5 @@ export default class Zombie extends Entity {
 
     public draw(p: p5): void {
         super.draw(p);
-
-        this.move();
     }
 }

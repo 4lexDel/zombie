@@ -4,8 +4,6 @@ import { COLORS, type ColorOption } from "../../colors";
 import Map from "../Map";
 
 export default class Entity extends BaseObject {
-    protected diameter: number = 30;
-
     protected speed: number = 6;
 
     protected directionFacing = { x: 1, y: 0 };
@@ -22,10 +20,6 @@ export default class Entity extends BaseObject {
         super(x, y);
 
         this.color = COLORS.blue;
-    }
-
-    public getDiameter(): number {
-        return this.diameter;
     }
 
     public getDirectionFacing(): { x: number; y: number } {

@@ -9,14 +9,17 @@ export default class Gun extends Weapon {
     private height: number = 10;
 
     constructor(x: number = 0, y: number = 0) {
-        super("Gun", 10, 2, x, y);
-        this.radius = 20;
+        super("Gun", 10, 2, 2, x, y);
     }
 
-    public use(originEntity: Entity, map: Map): boolean {
+    public use(originEntity: Entity, map: Map): boolean {        
+        if (this.lastShotTime && Date.now() - this.lastShotTime < 1000/this.shotFrequency) return false;
+
+        this.lastShotTime = Date.now();
+
         const angleFacing = originEntity.getAngleFacing()
         
-        map.addBullet(
+        map.addBullets(
             new Bullet(
                 originEntity,
                 originEntity.getX() + Math.cos(angleFacing) * originEntity.getDiameter(),
