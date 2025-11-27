@@ -6,6 +6,7 @@ import Wall from "./cell/Wall";
 import type Item from "./item/Item";
 import type Bullet from "./Bullet";
 import type Zombie from "./entity/Zombie";
+import type Player from "./entity/Player";
 
 export class MapLists {
     public static getDefaultMap(): Cell[][] {
@@ -163,5 +164,36 @@ export default class Map {
             
             bullet.draw(p5);
         }
+    }
+
+    public drawMiniMap(p5: p5, x: number, y: number, width: number, height: number, player: Player): void {
+        const mapWidth = this.cells.length * Map.CELL_SIZE;
+        const mapHeight = this.cells[0].length * Map.CELL_SIZE;
+        const scaleX = width / mapWidth;
+        const scaleY = height / mapHeight;
+        p5.push();
+        p5.translate(x, y);
+        p5.noStroke();
+        // Draw cells
+        for (let i = 0; i < this.cells.length; i++) {
+            for (let j = 0; j < this.cells[0].length; j++) {
+                const cell = this.cells[i][j];
+                if (cell instanceof Wall) {
+                    p5.fill(100);
+                } else {
+                    p5.fill(200);
+                }
+                p5.rect(i * Map.CELL_SIZE * scaleX, j * Map.CELL_SIZE * scaleY, Map.CELL_SIZE * scaleX, Map.CELL_SIZE * scaleY);
+            }
+        }
+        // Draw player
+        p5.fill(0, 0, 255);
+        p5.ellipse(player.getX() * scaleX, player.getY() * scaleY, 8, 8);
+        // Draw zombies
+        p5.fill(255, 0, 0);
+        for (const zombie of this.zombies) {
+            p5.ellipse(zombie.getX() * scaleX, zombie.getY() * scaleY, 6, 6);
+        }
+        p5.pop();
     }
 }

@@ -74,6 +74,10 @@ export default class Scene {
         // DEBUG PATHFINDER
         // this.pathfinder.drawCostPaths(this.p5);
         this.player.draw(this.p5);
+
+        // Draw the mini map
+        this.map.drawMiniMap(this.p5, this.p5.width - 110, 10, 100, 100, this.player);
+
         
         this.p5.pop();
         
