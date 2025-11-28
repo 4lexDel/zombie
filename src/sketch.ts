@@ -3,7 +3,8 @@ import { initColors } from "./colors";
 import Scene from "./game/Scene";
 
 function showFps(p: p5) {
-  let fps = `${p.frameRate().toPrecision(2)} fps`;
+  const fpsMeasured = p.frameRate();
+  let fps = `${(fpsMeasured > 60 ? 60 : fpsMeasured).toPrecision(2)} fps`;
     p.textSize(30);
     p.fill(0);
     p.noStroke();
@@ -13,6 +14,8 @@ function showFps(p: p5) {
 
 const sketch = (p: p5) => {
   let scene: Scene;
+
+  let drawImplementation: () => void;
 
   p.setup = () => {
     p.frameRate(30);
@@ -25,14 +28,22 @@ const sketch = (p: p5) => {
     // Initialize the scene
     scene = new Scene(p);
     scene.resize(p.windowWidth, p.windowHeight);
+
+    drawImplementation = () => {
+      p.background(255, 254, 240);
+      scene.draw();
+
+      showFps(p);
+    };
+
+    drawImplementation();
+
+    p.noLoop();
   };
 
   p.draw = () => {
-    p.clear();
-    p.background(255, 254, 240);
-    scene.draw();
-
-    showFps(p);
+    // if (!gameState.isRunning) return;
+    drawImplementation();
   };
 
   p.windowResized = () => {    
@@ -43,4 +54,4 @@ const sketch = (p: p5) => {
   };
 };
 
-new p5(sketch);
+export default sketch;
