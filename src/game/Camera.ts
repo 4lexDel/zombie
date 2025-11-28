@@ -14,7 +14,7 @@ export default class Camera {
 
 
     // Used for map dragging
-    private mouseDraggingSensibility = 0.08;
+    private mouseDraggingSensibility = 0.3;
 
     private offsetX = 0;
     private offsetY = 0;

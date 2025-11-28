@@ -79,7 +79,7 @@ A zombie survivor game
     * Allow the player to select it's own keys
     * Difficulties
 - Bugs
-    * We can place a bloc on a zombie
+    * We can place a bloc on a zombie => the pathfinding delay makes the zombie cheat
 
 <br>
 

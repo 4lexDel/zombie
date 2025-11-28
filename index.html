@@ -4,6 +4,8 @@
     <title>Zombie</title>
     <script type="module" src="/src/main.ts"></script>
     <link rel="stylesheet" href="/src/style.css">
+    <link rel="stylesheet" href="/src/modal.css">
+    <link rel="stylesheet" href="/src/drawer.css">
     <link href="https://fonts.googleapis.com/css2?family=Creepster&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
   </head>
@@ -19,6 +21,44 @@
       <button id="save-level-button" class="animate-button d-none">Save level</button>
       <button id="load-level-button" class="d-none">Load level</button>
       <button id="back-home-button" class="d-none">Back to home</button>
+    </div>
+
+    <div id="drawer">
+      <h2>Editor</h2>
+
+      <hr>
+
+      <h3>Cell palette</h3>
+
+      <div class="palette">
+        <div class="item">
+          <div class="block" id="ground"></div>
+          <label for="">Ground</label>
+        </div>
+        <div class="item">
+          <div class="block" id="box"></div>
+          <label for="">Box</label>
+        </div>
+        <div class="item">
+          <div class="block" id="wall"></div>
+          <label for="">Wall</label>
+        </div>
+      </div>
+
+      <br><br>
+      <hr>
+
+      <h3>Item palette</h3>
+
+      <label for="">Coming soon...</label>
+
+      <br><br>
+      <hr>
+
+      <h3>Entity</h3>
+
+      <label for="">Coming soon...</label>
+
     </div>
   </body>
 </html>

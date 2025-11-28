@@ -21,7 +21,7 @@ function showFps(p: p5) {
 const sketch = (p: p5) => {
   let scene: Scene;
 
-  let drawImplementation: () => void;
+  let drawImplementation: (displayOnly?: boolean) => void;
 
   p.setup = () => {
     p.frameRate(30);
@@ -35,10 +35,10 @@ const sketch = (p: p5) => {
     scene = new Scene(p);
     scene.resize(p.windowWidth, p.windowHeight);
 
-    drawImplementation = () => {
+    drawImplementation = (displayOnly=false) => {
       p.background(255, 254, 240);
 
-      scene.update();
+      !displayOnly && scene.update();
       scene.draw();
 
       showFps(p);
@@ -57,6 +57,7 @@ const sketch = (p: p5) => {
     p.background(220);
 
     scene.resize(p.windowWidth, p.windowHeight);
+    drawImplementation(true);
   };
 };
 

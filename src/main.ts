@@ -16,12 +16,16 @@ const backHomeButton = document.getElementById("back-home-button");
 const modal = document.getElementById("modal");
 const modalBg = document.getElementById("modal-bg");
 
+// Drawer
+const drawer = document.getElementById("drawer");
+
 // Canvas
 const getCanvas = () => document.querySelector("canvas");
 
-if (resumeButton && newGameButton && levelEditorButton && continueEditingButton && saveLevelButton && loadLevelButton && backHomeButton && modal && modalBg) {
+if (resumeButton && newGameButton && levelEditorButton && continueEditingButton && saveLevelButton && loadLevelButton && backHomeButton && modal && modalBg && drawer) {
     const diseableElement = (element: HTMLElement) => {
         element.style.display = "none";
+        drawer.classList.remove("side-reveal");
     }
 
     const enableElement = (element: HTMLElement) => {
@@ -72,10 +76,14 @@ if (resumeButton && newGameButton && levelEditorButton && continueEditingButton 
     const resumeGame = () => {
         hideModal();
         gameState.isRunning = true;
+        if (gameState.editMode) {
+            drawer.classList.add("side-reveal");
+        }
     }
 
     const pauseGame = () => {
         displayModal();
+        drawer.classList.remove("side-reveal");
 
         gameState.isRunning = false;
     }
@@ -127,6 +135,7 @@ if (resumeButton && newGameButton && levelEditorButton && continueEditingButton 
             
             canvas && (canvas.style.cursor = "crosshair");
         });
+        drawer.classList.add("side-reveal");
     });
 
     backHomeButton.addEventListener("click", () => {
@@ -135,7 +144,7 @@ if (resumeButton && newGameButton && levelEditorButton && continueEditingButton 
 
     window.addEventListener("keydown", (event) => {
         if (event.key === "Escape") {
-            if (modal.style.display === "flex" && resumeButton.style.display === "inline-block") {                
+            if (modal.style.display === "flex" && (resumeButton.style.display === "inline-block" || continueEditingButton.style.display == "inline-block")) {                
                 resumeGame();
             }
             else {
