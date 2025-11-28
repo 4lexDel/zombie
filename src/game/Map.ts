@@ -123,6 +123,16 @@ export default class Map {
         this.bullets = this.bullets.filter((bullet: Bullet) => bullet.getIsAlive());
     }
 
+    public update(): void {
+        for (const zombie of this.zombies) {
+            zombie.move();
+        }
+
+        for (const bullet of this.bullets) {
+            bullet.move(this);
+        }
+    }
+
     public draw(p5: p5, camera: Camera): void {
         // Draw cells
         for (let x = 0; x < this.cells.length; x++) {
@@ -147,8 +157,6 @@ export default class Map {
 
         // Draw zombie
         for (const zombie of this.zombies) {
-            zombie.move();
-
             // Performance optimization (to refacto ?)
             if (zombie.getX() + Map.CELL_SIZE < camera.getOriginX() || zombie.getX() - Map.CELL_SIZE > camera.getOriginX() + p5.width / camera.getZoom()) continue;
             if (zombie.getY() + Map.CELL_SIZE < camera.getOriginY() || zombie.getY() - Map.CELL_SIZE > camera.getOriginY() + p5.height / camera.getZoom()) continue;
@@ -158,8 +166,6 @@ export default class Map {
 
         // Draw bullets
         for (const bullet of this.bullets) {
-            bullet.move(this);
-
             // Performance optimization (to refacto ?)
             if (bullet.getX() + Map.CELL_SIZE < camera.getOriginX() || bullet.getX() - Map.CELL_SIZE > camera.getOriginX() + p5.width / camera.getZoom()) continue;
             if (bullet.getY() + Map.CELL_SIZE < camera.getOriginY() || bullet.getY() - Map.CELL_SIZE > camera.getOriginY() + p5.height / camera.getZoom()) continue;

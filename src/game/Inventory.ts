@@ -86,7 +86,7 @@ export default class Inventory {
         return this.slots.every((slot) => !!slot);
     }
 
-    public UpdateControls(p5: p5): void {
+    public updateControls(p5: p5): void {
         if (!p5.keyIsPressed) {
             return;
         }
@@ -114,9 +114,11 @@ export default class Inventory {
         return null;
     }
 
-    public draw(p: p5): void {
-        this.UpdateControls(p);
+    public update(p: p5): void {
+        this.updateControls(p);
+    }
 
+    public draw(p: p5): void {
         const inventoryWidth = Inventory.MAX_ITEMS * this.cellSize + (Inventory.MAX_ITEMS-1) * this.cellGap;
         const inventoryHeight = this.cellSize;
 

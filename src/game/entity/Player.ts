@@ -8,18 +8,14 @@ import Entity from "./Entity";
 import { COLORS } from "../../colors";
 import Utils from "../../tools/Utils";
 
-export default class Player extends Entity {   
-    private map: Map;
-    
+export default class Player extends Entity {       
     private inventory: Inventory;
 
     private dropUsed = false;
     private actionUsed = false;
 
-    constructor(map: Map, x: number = 0, y: number = 0) {
+    constructor(x: number = 0, y: number = 0) {
         super(x, y);
-
-        this.map = map;
 
         this.inventory = new Inventory();
 
@@ -37,20 +33,20 @@ export default class Player extends Entity {
     }
 
 
-    public updateControls(p: p5): void {
+    public updateControls(p: p5, map: Map): void {
         if (!p.keyIsPressed) {
             this.resetBoleansControl();
             return;
         }
 
-        this.handleCellCollisions(p);
+        this.handleCellCollisions(p, map);
 
-        this.handleItemCollisions();
+        this.handleItemCollisions(map);
 
-        this.handleItemControls(p);
+        this.handleItemControls(p, map);
     }
 
-    public handleCellCollisions(p: p5): void {
+    public handleCellCollisions(p: p5, map: Map): void {
         let newDirectionFacing = { x:0, y: 0 };
             
         let dx = 0;
@@ -91,7 +87,7 @@ export default class Player extends Entity {
             { x: newX + this.diameter / 2, y: this.y + this.diameter / 2 },
         ];
         for (const corner of xCorners) {
-            if (this.map.getCell(corner.x, corner.y)?.getCellOptions().isSolid) {
+            if (map.getCell(corner.x, corner.y)?.getCellOptions().isSolid) {
                 canMoveX = false;
                 break;
             }
@@ -106,7 +102,7 @@ export default class Player extends Entity {
             { x: this.x + this.diameter / 2, y: newY + this.diameter / 2 },
         ];
         for (const corner of yCorners) {
-            if (this.map.getCell(corner.x, corner.y)?.getCellOptions().isSolid) {
+            if (map.getCell(corner.x, corner.y)?.getCellOptions().isSolid) {
                 canMoveY = false;
                 break;
             }
@@ -120,15 +116,15 @@ export default class Player extends Entity {
         if (canMoveY) this.y = newY;
     }
 
-    public handleItemCollisions(): void {
+    public handleItemCollisions(map: Map): void {
         // Check items collision
-        this.map.getItems().forEach((newItem: Item) => {
+        map.getItems().forEach((newItem: Item) => {
             if (this.isCollidingWith(newItem)) this.inventory.addItem(newItem);
         });
-        this.map.clearItemsPicked();
+        map.clearItemsPicked();
     }
 
-    public handleItemControls(p: p5): void {
+    public handleItemControls(p: p5, map: Map): void {
         if (p.keyIsDown('a') && !this.dropUsed) {
             this.dropUsed = true;
             
@@ -141,7 +137,7 @@ export default class Player extends Entity {
                 let newX = this.x + Math.cos(angleFacing) * Map.CELL_SIZE * range;
                 let newY = this.y + Math.sin(angleFacing) * Map.CELL_SIZE * range;
 
-                if (this.map.getCell(newX, newY)?.getCellOptions().isSolid) {
+                if (map.getCell(newX, newY)?.getCellOptions().isSolid) {
                     const cellCoords = Map.parseCoordsToCell(this.x, this.y);
                     const centerCellX = cellCoords.cellX * Map.CELL_SIZE + Map.CELL_SIZE / 2;
                     const centerCellY = cellCoords.cellY * Map.CELL_SIZE + Map.CELL_SIZE / 2;
@@ -153,7 +149,7 @@ export default class Player extends Entity {
                 itemDropped.setX(newX);
                 itemDropped.setY(newY);
     
-                this.map.addItems(itemDropped);
+                map.addItems(itemDropped);
             }
         } else if (!p.keyIsDown('a')) {
             this.dropUsed = false;
@@ -162,7 +158,7 @@ export default class Player extends Entity {
         if (p.keyIsDown(' ') && (!this.actionUsed || true)) {   // <--------------------- Shot auto ?
             this.actionUsed = true;
 
-            const success = this.inventory.getItemSelected()?.use(this, this.map);
+            const success = this.inventory.getItemSelected()?.use(this, map);
             if (success) this.inventory.removeItemFromCurrentSlot();             
         } else if (!p.keyIsDown(' ')) {
             this.actionUsed = false;
@@ -171,6 +167,11 @@ export default class Player extends Entity {
 
     public resize(width: number, height: number): void {
         this.inventory.resize(width, height);
+    }
+
+    public update(p: p5, map: Map): void {
+        this.updateControls(p, map)
+        this.inventory.update(p);
     }
 
     public draw(p: p5): void {

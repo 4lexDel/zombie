@@ -6,6 +6,7 @@ import Gun from "./item/Gun";
 import Box from "./item/Box";
 import Zombie from "./entity/Zombie";
 import Pathfinder from "./Pathfinder";
+import { gameState } from "../sketch";
 
 export default class Scene {
     private p5: p5;
@@ -25,7 +26,7 @@ export default class Scene {
         this.map.addItems(new Gun(17.5 * Map.CELL_SIZE, 13.5 * Map.CELL_SIZE));
         this.map.addItems(new Box(17.5 * Map.CELL_SIZE, 10.5 * Map.CELL_SIZE));
 
-        this.player = new Player(this.map, this.map.getCells().length/2 * Map.CELL_SIZE, this.map.getCells()[0].length/2 * Map.CELL_SIZE);
+        this.player = new Player(this.map.getCells().length/2 * Map.CELL_SIZE, this.map.getCells()[0].length/2 * Map.CELL_SIZE);
 
         this.pathfinder = new Pathfinder(this.map, this.player);
 
@@ -53,14 +54,20 @@ export default class Scene {
     public resize(width: number, height: number): void {
         this.player.resize(width, height);
     }
-    
-    public draw(): void {
-        // Update player controls
-        this.player.updateControls(this.p5);
 
+    public update(): void {
+        if (gameState.editMode) return;
+
+        // Update player controls
+        this.player.update(this.p5, this.map);
+    
         // Refresh pathfinder (every 10 frames)
         if (this.p5.frameCount % 10 === 0) this.pathfinder.refreshPaths();
 
+        this.map.update();
+    }
+    
+    public draw(): void {
         this.p5.push();
 
         // Zoom

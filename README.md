@@ -78,6 +78,8 @@ A zombie survivor game
 - Settings 
     * Allow the player to select it's own keys
     * Difficulties
+- Bugs
+    * We can place a bloc on a zombie
 
 <br>
 

@@ -12,6 +12,10 @@ canvas {
     z-index: 1;
 }
 
+.d-none {
+    display: none;
+}
+
 #modal-bg {
     position: fixed;
     top: 0;

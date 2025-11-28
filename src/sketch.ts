@@ -2,6 +2,12 @@ import p5 from "p5";
 import { initColors } from "./colors";
 import Scene from "./game/Scene";
 
+// Used everywhere: control the game state: it enables/diseables specific features
+export const gameState = {
+  isRunning: false,
+  editMode: false
+}
+
 function showFps(p: p5) {
   const fpsMeasured = p.frameRate();
   let fps = `${(fpsMeasured > 60 ? 60 : fpsMeasured).toPrecision(2)} fps`;
@@ -31,18 +37,18 @@ const sketch = (p: p5) => {
 
     drawImplementation = () => {
       p.background(255, 254, 240);
+
+      scene.update();
       scene.draw();
 
       showFps(p);
     };
 
     drawImplementation();
-
-    p.noLoop();
   };
 
   p.draw = () => {
-    // if (!gameState.isRunning) return;
+    if (!gameState.isRunning) return;
     drawImplementation();
   };
 
