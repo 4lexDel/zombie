@@ -23,6 +23,8 @@ if (newGameButton && resumeButton && modal && modalBg && mapEditorButton) {
         modalBg.style.display = "block";
         resumeButton.style.display = "inline-block";
 
+        newGameButton.classList.remove("animate-button");
+
         p5Instance.noLoop();
     }
 

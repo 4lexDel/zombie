@@ -67,10 +67,29 @@ canvas {
     transition: 0.25s ease;
 }
 
+.animate-button:not(:hover) {
+    animation-name: blink;
+    animation-duration: 0.4s;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(0.7, 0.2, 0.2, 0.7);
+}
+
+@keyframes blink {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.06);
+    }
+}
+
 #modal button:hover {
     background-color: #2a2a2a;
-    border-color: rgb(255, 63, 63);
+    border-color: rgb(217, 11, 11);
+    transition-duration: 1s;
     transform: translateY(-2px);
+    transition: 0.4s ease;
 }
 
 #modal button:active {
