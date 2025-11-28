@@ -48,7 +48,7 @@ export default class Scene {
 
         this.map.addZombies(...this.zombies);
         
-        this.camera = new Camera(this.p5, this.player, 1);
+        this.camera = new Camera(this.p5, this.player, 1, gameState.editMode ? "FREE" : "FOCUS");
     }
     
     public resize(width: number, height: number): void {

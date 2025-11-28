@@ -16,7 +16,8 @@ const backHomeButton = document.getElementById("back-home-button");
 const modal = document.getElementById("modal");
 const modalBg = document.getElementById("modal-bg");
 
-// 
+// Canvas
+const getCanvas = () => document.querySelector("canvas");
 
 if (resumeButton && newGameButton && levelEditorButton && continueEditingButton && saveLevelButton && loadLevelButton && backHomeButton && modal && modalBg) {
     const diseableElement = (element: HTMLElement) => {
@@ -79,7 +80,7 @@ if (resumeButton && newGameButton && levelEditorButton && continueEditingButton 
         gameState.isRunning = false;
     }
 
-    const restartGameInstance = (edit=false) => {
+    const restartGameInstance = (edit=false, callback: (() => void) | null) => {
         p5Instance.remove();
         p5Instance = new p5((p: p5) => {
             // initialize the sketch to register its lifecycle methods
@@ -87,11 +88,12 @@ if (resumeButton && newGameButton && levelEditorButton && continueEditingButton 
             // wrap setup so that loop is started after setup finishes
             const originalSetup = (p as any).setup;
             (p as any).setup = function () {
+                gameState.editMode = edit;
                 if (originalSetup) {
                     originalSetup.apply(this, arguments);
                 }
-                gameState.editMode = edit;
                 gameState.isRunning = true;
+                callback && callback();
             };
         });
     }
@@ -102,8 +104,11 @@ if (resumeButton && newGameButton && levelEditorButton && continueEditingButton 
     newGameButton.addEventListener("click", () => {
         enableGameButtons();
         hideModal();
-        restartGameInstance(false);
-        
+        restartGameInstance(false, () => {
+            const canvas = getCanvas();
+            
+            canvas && (canvas.style.cursor = "default");
+        });
     });
 
     resumeButton.addEventListener("click", () => {
@@ -117,7 +122,11 @@ if (resumeButton && newGameButton && levelEditorButton && continueEditingButton 
     levelEditorButton.addEventListener("click", () => {
         enableEditButtons();
         hideModal();
-        restartGameInstance(true);
+        restartGameInstance(true, () => {
+            const canvas = getCanvas();
+            
+            canvas && (canvas.style.cursor = "crosshair");
+        });
     });
 
     backHomeButton.addEventListener("click", () => {
