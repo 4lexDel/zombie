@@ -1,64 +1,101 @@
+/**
+ * Main file of the whole project
+ */
 import p5 from "p5";
 import { initColors } from "./colors";
 import Scene from "./game/Scene";
+import Menu from "./game/Menu";
 
-// Used everywhere: control the game state: it enables/diseables specific features
-export const gameState = {
-  isRunning: false,
-  editMode: false
-}
+export type GameState = { isRunning: boolean, editMode: boolean };
 
-function showFps(p: p5) {
-  const fpsMeasured = p.frameRate();
-  let fps = `${(fpsMeasured > 60 ? 60 : fpsMeasured).toPrecision(2)} fps`;
+class Sketch {
+  private p5Instance?: p5;
+
+  private menu: Menu;
+
+  private gameState: GameState = {
+    isRunning: false,
+    editMode: false
+  }
+
+  private scene!: Scene;
+
+  constructor() {
+    this.menu = new Menu(this);
+    this.initP5Instance();
+
+    this.menu.onSaveButtonClicked = () => {
+      console.log("SAVE LEVEL");
+    }
+  }
+
+  public getGameState(): GameState {
+    return this.gameState;
+  }
+
+  public setEditMode(state: boolean): void {
+    this.gameState.editMode = state;
+  }
+
+  public setIsRunning(state: boolean): void {
+    this.gameState.isRunning = state;
+  }
+
+  public initP5Instance(callback?: (() => void) | null): void {
+    this.p5Instance?.remove();
+    this.p5Instance = new p5((p: p5) => {
+      let drawImplementation: (displayOnly?: boolean) => void;
+
+      p.setup = () => {
+        p.frameRate(30);
+
+        p.createCanvas(p.windowWidth, p.windowHeight);
+
+        // Set color variables
+        initColors(p);
+
+        // Initialize the scene
+        this.scene = new Scene(p, this.gameState);
+        this.scene.resize(p.windowWidth, p.windowHeight);
+
+        drawImplementation = (displayOnly = false) => {
+          p.background(255, 254, 240);
+
+          !displayOnly && this.scene.update();
+          this.scene.draw();
+
+          this.showFps(p);
+
+          callback && callback();
+        };
+
+        drawImplementation();
+      };
+
+      p.draw = () => {
+        if (!this.gameState.isRunning) return;
+        drawImplementation();
+      };
+
+      p.windowResized = () => {
+        p.resizeCanvas(p.windowWidth, p.windowHeight);
+        p.background(220);
+
+        this.scene.resize(p.windowWidth, p.windowHeight);
+        drawImplementation(true);
+      };
+    });
+  }
+
+  private showFps(p: p5) {
+    const fpsMeasured = p.frameRate();
+    let fps = `${(fpsMeasured > 60 ? 60 : fpsMeasured).toPrecision(2)} fps`;
     p.textSize(30);
     p.fill(0);
     p.noStroke();
     p.textAlign(p.LEFT, p.TOP)
     p.text(fps, 10, 10)
+  }
 }
 
-const sketch = (p: p5) => {
-  let scene: Scene;
-
-  let drawImplementation: (displayOnly?: boolean) => void;
-
-  p.setup = () => {
-    p.frameRate(30);
-
-    p.createCanvas(p.windowWidth, p.windowHeight);
-
-    // Set color variables
-    initColors(p);
-
-    // Initialize the scene
-    scene = new Scene(p);
-    scene.resize(p.windowWidth, p.windowHeight);
-
-    drawImplementation = (displayOnly=false) => {
-      p.background(255, 254, 240);
-
-      !displayOnly && scene.update();
-      scene.draw();
-
-      showFps(p);
-    };
-
-    drawImplementation();
-  };
-
-  p.draw = () => {
-    if (!gameState.isRunning) return;
-    drawImplementation();
-  };
-
-  p.windowResized = () => {    
-    p.resizeCanvas(p.windowWidth, p.windowHeight);
-    p.background(220);
-
-    scene.resize(p.windowWidth, p.windowHeight);
-    drawImplementation(true);
-  };
-};
-
-export default sketch;
+export default Sketch;

@@ -5,4 +5,7 @@ export default defineConfig({
   server: {
     open: true,
   },
+  optimizeDeps: {
+    exclude: ['reflect-metadata.js']
+  }
 });

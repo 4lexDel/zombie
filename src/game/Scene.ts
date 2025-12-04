@@ -6,10 +6,12 @@ import Gun from "./item/Gun";
 import Box from "./item/Box";
 import Zombie from "./entity/Zombie";
 import Pathfinder from "./Pathfinder";
-import { gameState } from "../sketch";
+import type { GameState } from "../sketch";
 
 export default class Scene {
     private p5: p5;
+
+    private gameState: GameState;
 
     private camera: Camera;
 
@@ -19,8 +21,9 @@ export default class Scene {
 
     private zombies: Zombie[] = [];
 
-    constructor(p5: p5) {
+    constructor(p5: p5, gameState: GameState) {
         this.p5 = p5;
+        this.gameState = gameState;
         this.map = new Map(MapLists.getDefaultMap());
         this.map.addItems(new Gun(11.5 * Map.CELL_SIZE, 10.5 * Map.CELL_SIZE));
         this.map.addItems(new Gun(17.5 * Map.CELL_SIZE, 13.5 * Map.CELL_SIZE));
@@ -48,7 +51,7 @@ export default class Scene {
 
         this.map.addZombies(...this.zombies);
         
-        this.camera = new Camera(this.p5, this.player, 1, gameState.editMode ? "FREE" : "FOCUS");
+        this.camera = new Camera(this.p5, this.gameState, this.player, 1);
     }
     
     public resize(width: number, height: number): void {
@@ -56,7 +59,7 @@ export default class Scene {
     }
 
     public update(): void {
-        if (gameState.editMode) return;
+        if (this.gameState.editMode) return;
 
         // Update player controls
         this.player.update(this.p5, this.map);
