@@ -4,11 +4,11 @@ import { COLORS } from "../../colors";
 import Utils from "../../tools/Utils";
 
 export default class Zombie extends Entity {       
-    constructor(x: number = 0, y: number = 0) {
+    constructor(x: number = 0, y: number = 0, speed: number = -1) {
         super(x, y);
 
         this.diameter = 40;
-        this.speed = Utils.getRandomNumber(1.5, 3.5);
+        this.speed = speed === -1 ? Utils.getRandomNumber(1.5, 3.5) : speed;
         this.color = COLORS.red;
     }
 

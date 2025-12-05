@@ -84,6 +84,7 @@ A zombie survivor game
 <br>
 
 ## Technical story
+- Create a Wave object to make the zombie spawn configuration easier
 - Manage performance!
     * Display the content on the screen only    > done but can be improved by breaking the loop when possible
     * Avoid useless refreshing

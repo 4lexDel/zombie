@@ -24,8 +24,44 @@ class Sketch {
     this.menu = new Menu(this);
     this.initP5Instance();
 
-    this.menu.onSaveButtonClicked = () => {
-      console.log("SAVE LEVEL");
+    this.menu.onSaveButtonClicked = async () => {
+      try {
+        // Open a save dialog
+        const handle = await (window as any).showSaveFilePicker({
+          suggestedName: "custom-level.json",
+          types: [
+            {
+              description: "JSON file",
+              accept: { "text/json": [".json"] }
+            }
+          ]
+        });
+
+        // Stream open
+        const writable = await handle.createWritable();
+
+        // Write the file contents
+        await writable.write(`CONTENT`);
+        // PROVIDE THE SERIALIZATION CONTENT
+
+        // Stream close
+        await writable.close();
+      } catch (err) {
+        console.error("Save cancelled or failed:", err);
+      }
+    }
+
+    this.menu.onLoadButtonClicked = () => {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = "*/*"; // optional
+      input.onchange = (event) => {
+        const file = (event.target as HTMLInputElement).files?.[0];
+        console.log("Selected file:", file);
+
+        // MANAGE THE LOAD LOGIC
+      };
+      input.click();
     }
   }
 

@@ -1,7 +1,7 @@
 #drawer {
     position: fixed;
 
-    width: min(20%, 180px);
+    width: max(20%, 180px);
     height: 100%;
 
     transform: translateX(-200px);

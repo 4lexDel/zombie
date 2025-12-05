@@ -6,6 +6,7 @@ export default class Menu {
 
     // Callback (use by the sketch)
     public onSaveButtonClicked?: () => void;
+    public onLoadButtonClicked?: () => void;
 
     // Buttons
     private resumeButton = document.getElementById("resume-button");
@@ -138,6 +139,10 @@ export default class Menu {
 
         this.saveLevelButton?.addEventListener("click", () => {
             this.onSaveButtonClicked?.();
+        });
+
+        this.loadLevelButton?.addEventListener("click", () => {
+            this.onLoadButtonClicked?.();
         });
 
         this.backHomeButton?.addEventListener("click", () => {
