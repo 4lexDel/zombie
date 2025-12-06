@@ -65,6 +65,30 @@ export default class Map {
         this.cells = cells;
     }
 
+    public setCells(cells: Cell[][]): void {
+        this.cells = cells;
+    } 
+    
+    public setItems(items: Item[]): void {
+        this.items = items;
+    } 
+    
+    public setZombies(zombies: Zombie[]): void {
+        this.zombies = zombies;
+    } 
+    
+    public getCells(): Cell[][] {
+        return this.cells;
+    }
+
+    public getItems(): Item[] {
+        return this.items;
+    }
+
+    public getZombies(): Zombie[] {
+        return this.zombies;
+    }
+
     public static parseCoordsToCell(x: number, y: number): { cellX: number; cellY: number } {
         const cellX = Math.floor(x / Map.CELL_SIZE);
         const cellY = Math.floor(y / Map.CELL_SIZE);
@@ -101,18 +125,6 @@ export default class Map {
 
     public addBullets(...bullets: Bullet[]): void {
         this.bullets.push(...bullets);
-    }
-
-    public getCells(): Cell[][] {
-        return this.cells;
-    }
-
-    public getItems(): Item[] {
-        return this.items;
-    }
-
-    public getZombies(): Zombie[] {
-        return this.zombies;
     }
 
     public clearItemsPicked(): void {

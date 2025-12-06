@@ -9,7 +9,9 @@ export class CellOptions {
     public color: ColorOption = COLORS.lightGrey;
 }
 
-export default class Cell extends BaseObject {    
+export default class Cell extends BaseObject {
+    protected id: number;
+
     protected dx: number;
     protected dy: number;
 
@@ -24,6 +26,11 @@ export default class Cell extends BaseObject {
         if (cellOptions) {
             this.cellOptions = cellOptions;
         }
+        this.id = -1;
+    }
+
+    public getId(): number {
+        return this.id;
     }
 
     public getCellOptions(): CellOptions {

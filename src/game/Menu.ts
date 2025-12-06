@@ -83,7 +83,7 @@ export default class Menu {
         this.enableElement(this.backHomeButton);
     }
 
-    private resumeGame(): void {
+    public resumeGame(): void {
         this.hideModal();
         this.sketch.setIsRunning(true);
         if (this.sketch.getGameState().editMode) {
@@ -91,7 +91,7 @@ export default class Menu {
         }
     }
 
-    private pauseGame(): void {
+    public pauseGame(): void {
         this.displayModal();
         this.drawer?.classList.remove("side-reveal");
 

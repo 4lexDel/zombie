@@ -31,18 +31,18 @@
 
       <h3>Cell palette</h3>
 
-      <div class="palette">
-        <div class="item">
+      <div class="palette cell-elements">
+        <div class="element">
           <div class="block" id="ground"></div>
-          <label for="">Ground</label>
+          <label for="ground">Ground</label>
         </div>
-        <div class="item">
-          <div class="block" id="box"></div>
-          <label for="">Box</label>
+        <div class="element">
+          <div class="block" id="box-cell"></div>
+          <label for="box">Box</label>
         </div>
-        <div class="item">
+        <div class="element">
           <div class="block" id="wall"></div>
-          <label for="">Wall</label>
+          <label for="wall">Wall</label>
         </div>
       </div>
 
@@ -51,14 +51,36 @@
 
       <h3>Item palette</h3>
 
-      <label for="">Coming soon...</label>
+      <div class="palette item-elements">
+        <div class="element">
+          <img src="./src/img/box.png" alt="box">
+          <label for="box">Box</label>
+          <div class="item" id="box-item"></div>
+        </div>
+        <div class="element">
+          <img src="./src/img/gun.png" alt="gun">
+          <label for="gun">Gun</label>
+          <div class="item" id="gun"></div>
+        </div>
+      </div>
 
       <br><br>
       <hr>
 
       <h3>Entity</h3>
 
-      <label for="">Coming soon...</label>
+      <div class="palette entity-elements">
+        <div class="element">
+          <img src="./src/img/player.png" alt="player">
+          <label for="player">Player</label>
+          <div class="entity" id="player"></div>
+        </div>
+        <div class="element">
+          <img src="./src/img/zombie.png" alt="zombie">
+          <label for="zombie">Zombie</label>
+          <div class="entity" id="zombie"></div>
+        </div>
+      </div>
 
     </div>
   </body>

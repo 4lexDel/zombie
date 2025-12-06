@@ -33,6 +33,11 @@ A zombie survivor game
 <br>
 
 ## Features
+- Add the wave object
+- Play the level created with the editor (god mode)
+- New game > select the level
+- Editor main features
+    * Place block/entities/item
 - Market => circle modal?
     * Buy
         + Weapons
@@ -61,6 +66,7 @@ A zombie survivor game
     * Traps blocks
     * Riffle/machine gun
 - Game design
+    * Add the erase button
     * Save & load system (create a format)
         + Content: 
             - Cells + Entities (player & zombies) + Items + bullets
@@ -80,10 +86,12 @@ A zombie survivor game
     * Difficulties
 - Bugs
     * We can place a bloc on a zombie => the pathfinding delay makes the zombie cheat
+    * The drawer can't go back properly if we resize the screen
 
 <br>
 
 ## Technical story
+- Manage the wrong format (+ the errors throw by the save & load)
 - Create a Wave object to make the zombie spawn configuration easier
 - Manage performance!
     * Display the content on the screen only    > done but can be improved by breaking the loop when possible

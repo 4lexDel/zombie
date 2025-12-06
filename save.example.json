@@ -1,8 +1,7 @@
 {
     "global": {
         "zoom": 2,
-        "cell_size": 50,
-        "level_name"
+        "cell_size": 50
     },
     "player": {
         "x": 1,

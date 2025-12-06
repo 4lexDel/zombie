@@ -27,6 +27,10 @@ export default class Player extends Entity {
         this.color = COLORS.green;
     }
 
+    public getInventory(): Inventory {
+        return this.inventory;
+    }
+
     private resetBoleansControl(): void {
         this.dropUsed = false;
         this.actionUsed = false;

@@ -5,6 +5,7 @@ import p5 from "p5";
 import { initColors } from "./colors";
 import Scene from "./game/Scene";
 import Menu from "./game/Menu";
+import Editor from "./tools/Editor";
 
 export type GameState = { isRunning: boolean, editMode: boolean };
 
@@ -12,6 +13,8 @@ class Sketch {
   private p5Instance?: p5;
 
   private menu: Menu;
+
+  private editor!: Editor;
 
   private gameState: GameState = {
     isRunning: false,
@@ -24,44 +27,14 @@ class Sketch {
     this.menu = new Menu(this);
     this.initP5Instance();
 
-    this.menu.onSaveButtonClicked = async () => {
-      try {
-        // Open a save dialog
-        const handle = await (window as any).showSaveFilePicker({
-          suggestedName: "custom-level.json",
-          types: [
-            {
-              description: "JSON file",
-              accept: { "text/json": [".json"] }
-            }
-          ]
-        });
-
-        // Stream open
-        const writable = await handle.createWritable();
-
-        // Write the file contents
-        await writable.write(`CONTENT`);
-        // PROVIDE THE SERIALIZATION CONTENT
-
-        // Stream close
-        await writable.close();
-      } catch (err) {
-        console.error("Save cancelled or failed:", err);
-      }
+    this.menu.onSaveButtonClicked = () => {
+      this.editor.save();
     }
 
-    this.menu.onLoadButtonClicked = () => {
-      const input = document.createElement("input");
-      input.type = "file";
-      input.accept = "*/*"; // optional
-      input.onchange = (event) => {
-        const file = (event.target as HTMLInputElement).files?.[0];
-        console.log("Selected file:", file);
-
-        // MANAGE THE LOAD LOGIC
-      };
-      input.click();
+    this.menu.onLoadButtonClicked = async () => {
+      const saveData = await this.editor.load();
+      saveData && this.scene.loadSaveData(saveData);
+      this.menu.resumeGame();
     }
   }
 
@@ -93,6 +66,8 @@ class Sketch {
         // Initialize the scene
         this.scene = new Scene(p, this.gameState);
         this.scene.resize(p.windowWidth, p.windowHeight);
+
+        this.editor = new Editor(p, this.scene);
 
         drawImplementation = (displayOnly = false) => {
           p.background(255, 254, 240);
